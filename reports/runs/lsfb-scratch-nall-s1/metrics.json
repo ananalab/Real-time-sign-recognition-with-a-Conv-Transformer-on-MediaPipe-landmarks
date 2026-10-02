@@ -1,0 +1,18 @@
+{
+ "run": "lsfb-scratch-nall-s1",
+ "model": "transformer",
+ "dataset": "lsfb_isol",
+ "n_params": 2129764,
+ "n_classes": 100,
+ "n_train": 26114,
+ "n_val": 4423,
+ "train_minutes": 19.064567573865254,
+ "git": "unknown",
+ "best_val": {
+  "top1": 0.7691612028035271,
+  "top5": 0.9301379154420076,
+  "macro_f1": 0.7016251527455784,
+  "epoch": 42
+ },
+ "checkpoint": "models/lsfb-scratch-nall-s1/best.pt"
+}

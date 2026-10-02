@@ -1,0 +1,15 @@
+# LSFB-ISOL v2 (French Belgian Sign Language), converted by scripts/convert_lsfb.py
+name: lsfb_isol
+raw_dir: data/raw/lsfb_isol          # metadata only (instances.csv, splits)
+out_dir: data/processed/lsfb_isol
+top_n: 100            # most frequent signs ...
+min_signers: 10       # ... performed by at least this many signers
+min_frames: 4         # drop degenerate clips
+raw_poses: true       # unsmoothed poses (NaN when a hand is missed), closer to webcam conditions
+fps: 50
+workers: 16           # parallel HTTP connections
+# Videos are 720x576 PAL with a 16:9 display aspect (anamorphic): y is multiplied by 576/1024 to
+# make coordinates isotropic. Checked on the data: the nose-to-shoulder height / shoulder span
+# ratio then matches the ASL data (0.43 vs 0.40), whereas a 4:3 assumption would give 0.57.
+y_scale: 0.5625
+y_scale_note: "720x576 PAL, 16:9 display aspect"

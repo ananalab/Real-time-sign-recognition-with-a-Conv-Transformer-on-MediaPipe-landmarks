@@ -1,0 +1,27 @@
+run_name: smoke-gru
+seed: 0
+data:
+  root: data/processed/kaggle_asl
+  split: splits/kaggle_asl_signer.json
+  n_classes: null
+  max_per_class: null
+model: configs/model/gru.yaml
+model_overrides: {}
+preprocess: configs/preprocess.yaml
+preprocess_overrides: {}
+augment: configs/augment.yaml
+train:
+  epochs: 2
+  batch_size: 128
+  lr: 0.001
+  weight_decay: 0.05
+  warmup_epochs: 1
+  label_smoothing: 0.1
+  grad_clip: 1.0
+  patience: 12
+  num_workers: 4
+  device: auto
+transfer:
+  init_from: null
+  freeze_epochs: 0
+mlflow: false

@@ -1,0 +1,6 @@
+{
+ "n_clips": 40,
+ "same_top1": 40,
+ "max_abs_prob_diff": 1.8477439880371094e-06,
+ "top1_on_examples": 0.7
+}

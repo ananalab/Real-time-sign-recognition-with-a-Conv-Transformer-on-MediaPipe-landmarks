@@ -1,0 +1,10 @@
+name: transformer
+max_len: 64
+dim: 192
+stages: 2
+convs_per_stage: 3
+kernel: 17
+expand: 2
+heads: 4
+mlp_ratio: 2
+dropout: 0.2

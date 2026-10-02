@@ -1,0 +1,10 @@
+# Main ASL models: Conv-Transformer and BiGRU, three seeds each, signer-independent split.
+name: asl-main
+sources: [kaggle_asl]
+runs:
+  - {run_name: asl-transformer-s0, overrides: [train.cache_val=true, seed=0], evaluate: [val, test]}
+  - {run_name: asl-transformer-s1, overrides: [train.cache_val=true, seed=1], evaluate: [val, test]}
+  - {run_name: asl-transformer-s2, overrides: [train.cache_val=true, seed=2], evaluate: [val, test]}
+  - {run_name: asl-gru-s0, overrides: [train.cache_val=true, seed=0, model=configs/model/gru.yaml], evaluate: [val, test]}
+  - {run_name: asl-gru-s1, overrides: [train.cache_val=true, seed=1, model=configs/model/gru.yaml], evaluate: [val, test]}
+  - {run_name: asl-gru-s2, overrides: [train.cache_val=true, seed=2, model=configs/model/gru.yaml], evaluate: [val, test]}

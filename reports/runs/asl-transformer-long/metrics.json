@@ -1,0 +1,18 @@
+{
+ "run": "asl-transformer-long",
+ "model": "transformer",
+ "dataset": "kaggle_asl",
+ "n_params": 2158714,
+ "n_classes": 250,
+ "n_train": 62084,
+ "n_val": 13981,
+ "train_minutes": 122.39803700049718,
+ "git": "unknown",
+ "best_val": {
+  "top1": 0.6753451112223732,
+  "top5": 0.8484371647235533,
+  "macro_f1": 0.6635590761417298,
+  "epoch": 149
+ },
+ "checkpoint": "models/asl-transformer-long/best.pt"
+}

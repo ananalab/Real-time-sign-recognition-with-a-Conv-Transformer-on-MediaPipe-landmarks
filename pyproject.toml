@@ -1,0 +1,53 @@
+[project]
+name = "signrec"
+version = "0.1.0"
+description = "Real-time isolated sign recognition from MediaPipe landmarks (ASL -> LSFB transfer)"
+readme = "README.md"
+requires-python = ">=3.11,<3.13"
+license = { text = "MIT" }
+dependencies = [
+    "numpy>=1.26,<3",
+    "pandas>=2.2",
+    "pyarrow>=15",
+    "pyyaml>=6",
+    "omegaconf>=2.3",
+    "tqdm>=4.66",
+    "torch>=2.4",
+    "scikit-learn>=1.5",
+    "lightgbm>=4.3",
+    "matplotlib>=3.9",
+    "tabulate>=0.9",
+    "joblib>=1.4",
+    "mlflow-skinny>=2.14",
+    "onnx>=1.16",
+    "onnxruntime>=1.18",
+    "onnxscript>=0.1",
+]
+
+[project.optional-dependencies]
+data = ["kaggle>=1.6"]
+dev = ["pytest>=8", "ruff>=0.6", "pre-commit>=3.7", "playwright>=1.45"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/signrec"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["src", "tests", "scripts", "app"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "N", "SIM"]
+ignore = ["N803", "N806", "N812"]  # allow math-style names (T, L, X)
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+pythonpath = ["tests"]
+
+[tool.ruff.lint.per-file-ignores]
+"scripts/make_figures.py" = ["E501"]  # long LaTeX table rows

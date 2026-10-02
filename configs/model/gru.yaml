@@ -1,0 +1,5 @@
+name: gru
+dim: 192
+hidden: 192
+layers: 2
+dropout: 0.3

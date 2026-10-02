@@ -1,0 +1,12 @@
+# Training-time augmentation (see src/signrec/augment.py for the two stages).
+p_spatial: 0.8        # applied after shoulder normalisation (body frame)
+rotate_deg: 15.0
+scale: [0.8, 1.2]     # per-axis
+shift: 0.1            # shoulder widths
+speed: [0.8, 1.2]     # global speed factor
+warp: 0.3             # local speed variation
+warp_segments: 4
+frame_drop: 0.1
+landmark_drop: 0.05
+hand_drop: 0.05
+noise_std: 0.002      # image units

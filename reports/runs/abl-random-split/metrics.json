@@ -1,0 +1,18 @@
+{
+ "run": "abl-random-split",
+ "model": "transformer",
+ "dataset": "kaggle_asl",
+ "n_params": 2158714,
+ "n_classes": 250,
+ "n_train": 62084,
+ "n_val": 13981,
+ "train_minutes": 42.363399557272594,
+ "git": "unknown",
+ "best_val": {
+  "top1": 0.8180387668979329,
+  "top5": 0.9311208068092411,
+  "macro_f1": 0.815088316009466,
+  "epoch": 46
+ },
+ "checkpoint": "models/abl-random-split/best.pt"
+}

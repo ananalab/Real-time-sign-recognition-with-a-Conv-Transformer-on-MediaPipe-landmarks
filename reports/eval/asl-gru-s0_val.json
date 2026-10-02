@@ -1,0 +1,224 @@
+{
+ "run": "asl-gru-s0",
+ "subset": "val",
+ "n": 13981,
+ "n_classes": 250,
+ "top1": 0.6569630212431157,
+ "top5": 0.8755453830198126,
+ "macro_f1": 0.64732571351294,
+ "signer_acc_mean": 0.6580042861389611,
+ "signer_acc_std": 0.05790262326788342,
+ "latency": {
+  "model_p50_ms": 13.975021003716392,
+  "model_p95_ms": 47.890885104424974,
+  "preprocess_ms": 0.31399083502037684
+ },
+ "by_signer": [
+  {
+   "g": "36257",
+   "acc": 0.5935457516339869,
+   "n": 4896
+  },
+  {
+   "g": "27610",
+   "acc": 0.6748538011695906,
+   "n": 4275
+  },
+  {
+   "g": "2044",
+   "acc": 0.7056133056133056,
+   "n": 4810
+  }
+ ],
+ "by_missing": [
+  {
+   "bin": "0",
+   "acc": 0.7218482252141983,
+   "n": 3268
+  },
+  {
+   "bin": "0-10%",
+   "acc": 0.7218442932728647,
+   "n": 1323
+  },
+  {
+   "bin": "10-25%",
+   "acc": 0.68687374749499,
+   "n": 1996
+  },
+  {
+   "bin": "25-50%",
+   "acc": 0.6925587467362925,
+   "n": 3064
+  },
+  {
+   "bin": ">50%",
+   "acc": 0.5491916859122402,
+   "n": 4330
+  }
+ ],
+ "worst_classes": [
+  {
+   "label": "give",
+   "acc": 0.078125
+  },
+  {
+   "label": "after",
+   "acc": 0.14285714285714285
+  },
+  {
+   "label": "there",
+   "acc": 0.16071428571428573
+  },
+  {
+   "label": "ride",
+   "acc": 0.16666666666666666
+  },
+  {
+   "label": "goose",
+   "acc": 0.19047619047619047
+  },
+  {
+   "label": "go",
+   "acc": 0.2
+  },
+  {
+   "label": "snack",
+   "acc": 0.2037037037037037
+  },
+  {
+   "label": "empty",
+   "acc": 0.21052631578947367
+  },
+  {
+   "label": "helicopter",
+   "acc": 0.22033898305084745
+  },
+  {
+   "label": "child",
+   "acc": 0.2222222222222222
+  }
+ ],
+ "confused_pairs": [
+  {
+   "true": "give",
+   "pred": "gift",
+   "count": 41,
+   "rate": 0.640625
+  },
+  {
+   "true": "listen",
+   "pred": "hear",
+   "count": 34,
+   "rate": 0.576271186440678
+  },
+  {
+   "true": "wake",
+   "pred": "awake",
+   "count": 32,
+   "rate": 0.5614035087719298
+  },
+  {
+   "true": "goose",
+   "pred": "duck",
+   "count": 28,
+   "rate": 0.4444444444444444
+  },
+  {
+   "true": "mouth",
+   "pred": "lips",
+   "count": 27,
+   "rate": 0.48214285714285715
+  },
+  {
+   "true": "kiss",
+   "pred": "home",
+   "count": 27,
+   "rate": 0.45
+  },
+  {
+   "true": "nap",
+   "pred": "sleep",
+   "count": 26,
+   "rate": 0.4482758620689655
+  },
+  {
+   "true": "goose",
+   "pred": "bird",
+   "count": 21,
+   "rate": 0.3333333333333333
+  },
+  {
+   "true": "pen",
+   "pred": "pencil",
+   "count": 21,
+   "rate": 0.3559322033898305
+  },
+  {
+   "true": "smile",
+   "pred": "cheek",
+   "count": 21,
+   "rate": 0.35
+  },
+  {
+   "true": "awake",
+   "pred": "wake",
+   "count": 21,
+   "rate": 0.3559322033898305
+  },
+  {
+   "true": "tooth",
+   "pred": "glasswindow",
+   "count": 21,
+   "rate": 0.38181818181818183
+  },
+  {
+   "true": "find",
+   "pred": "frenchfries",
+   "count": 20,
+   "rate": 0.32786885245901637
+  },
+  {
+   "true": "scissors",
+   "pred": "cut",
+   "count": 19,
+   "rate": 0.3220338983050847
+  },
+  {
+   "true": "say",
+   "pred": "chin",
+   "count": 19,
+   "rate": 0.34545454545454546
+  },
+  {
+   "true": "look",
+   "pred": "face",
+   "count": 18,
+   "rate": 0.3157894736842105
+  },
+  {
+   "true": "icecream",
+   "pred": "orange",
+   "count": 18,
+   "rate": 0.3050847457627119
+  },
+  {
+   "true": "why",
+   "pred": "sick",
+   "count": 18,
+   "rate": 0.34615384615384615
+  },
+  {
+   "true": "bedroom",
+   "pred": "bed",
+   "count": 18,
+   "rate": 0.2857142857142857
+  },
+  {
+   "true": "yes",
+   "pred": "shoe",
+   "count": 18,
+   "rate": 0.3157894736842105
+  }
+ ]
+}

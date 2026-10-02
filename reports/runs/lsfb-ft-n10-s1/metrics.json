@@ -1,0 +1,18 @@
+{
+ "run": "lsfb-ft-n10-s1",
+ "model": "transformer",
+ "dataset": "lsfb_isol",
+ "n_params": 2129764,
+ "n_classes": 100,
+ "n_train": 1000,
+ "n_val": 4423,
+ "train_minutes": 7.989168226718903,
+ "git": "unknown",
+ "best_val": {
+  "top1": 0.36875423920416006,
+  "top5": 0.6120280352701786,
+  "macro_f1": 0.32731672375986404,
+  "epoch": 190
+ },
+ "checkpoint": "models/lsfb-ft-n10-s1/best.pt"
+}

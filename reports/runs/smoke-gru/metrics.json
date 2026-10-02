@@ -1,0 +1,18 @@
+{
+ "run": "smoke-gru",
+ "model": "gru",
+ "dataset": "kaggle_asl",
+ "n_params": 1426810,
+ "n_classes": 250,
+ "n_train": 62084,
+ "n_val": 13981,
+ "train_minutes": 2.023602243264516,
+ "git": "unknown",
+ "best_val": {
+  "top1": 0.5327945068306988,
+  "top5": 0.816822830984908,
+  "macro_f1": 0.5070355322830852,
+  "epoch": 1
+ },
+ "checkpoint": "models/smoke-gru/best.pt"
+}

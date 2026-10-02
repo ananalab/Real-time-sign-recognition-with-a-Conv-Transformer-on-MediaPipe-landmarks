@@ -1,0 +1,18 @@
+{
+ "run": "lsfb-probe-nall-s0",
+ "model": "transformer",
+ "dataset": "lsfb_isol",
+ "n_params": 2129764,
+ "n_classes": 100,
+ "n_train": 26114,
+ "n_val": 4423,
+ "train_minutes": 80.06764668226242,
+ "git": "unknown",
+ "best_val": {
+  "top1": 0.3829979651820032,
+  "top5": 0.6606375763056749,
+  "macro_f1": 0.289565911585316,
+  "epoch": 33
+ },
+ "checkpoint": "models/lsfb-probe-nall-s0/best.pt"
+}

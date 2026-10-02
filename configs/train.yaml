@@ -1,0 +1,30 @@
+# Default training configuration. Override any key from the CLI, e.g.
+#   uv run python -m signrec.train --config configs/train.yaml model=configs/model/gru.yaml train.epochs=5
+run_name: null            # default: <dataset>-<model>-<timestamp>
+seed: 0
+data:
+  root: data/processed/kaggle_asl
+  split: splits/kaggle_asl_signer.json
+  n_classes: null         # keep only the first n classes (quick experiments)
+  max_per_class: null     # cap training examples per class (learning curves)
+model: configs/model/transformer.yaml
+model_overrides: {}       # e.g. {max_len: 96}
+preprocess: configs/preprocess.yaml
+preprocess_overrides: {}  # e.g. {T: 32} or {parts: [left_hand, right_hand, pose]}
+augment: configs/augment.yaml   # null disables augmentation
+train:
+  epochs: 50
+  batch_size: 128
+  lr: 1.0e-3
+  weight_decay: 0.05
+  warmup_epochs: 3
+  label_smoothing: 0.1
+  grad_clip: 1.0
+  patience: 10            # early stopping on validation macro-F1
+  num_workers: 4
+  cache_val: false        # precompute validation features once (small datasets)
+  device: auto            # auto | cpu | mps | cuda
+transfer:
+  init_from: null         # checkpoint whose encoder initialises this model (new head)
+  freeze_epochs: 0        # train only the head during the first K epochs
+mlflow: true

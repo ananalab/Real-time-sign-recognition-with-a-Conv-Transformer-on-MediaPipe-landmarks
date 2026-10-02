@@ -1,0 +1,11 @@
+# Single preprocessing configuration shared by training, evaluation and the web demo
+# (exported to app/web/models/preprocess.json).
+T: 64                     # fixed number of frames
+length_mode: resample     # resample | pad
+use_z: false              # MediaPipe depth is noisy, x/y only by default
+parts: [left_hand, right_hand, pose, lips]
+trim: true                # drop leading/trailing frames without any hand
+canonical_hand: true      # mirror so the most visible hand is always the "right_hand" slot
+hand_local: true          # extra features: dominant hand relative to its wrist, scale-normalised
+velocity: true            # first-order temporal differences
+min_shoulder_width: 0.02  # below this (in image units) the shoulder normalisation falls back

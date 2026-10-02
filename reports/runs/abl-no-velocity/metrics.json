@@ -1,0 +1,18 @@
+{
+ "run": "abl-no-velocity",
+ "model": "transformer",
+ "dataset": "kaggle_asl",
+ "n_params": 2116474,
+ "n_classes": 250,
+ "n_train": 62084,
+ "n_val": 13981,
+ "train_minutes": 33.38408889373144,
+ "git": "unknown",
+ "best_val": {
+  "top1": 0.6663328803376011,
+  "top5": 0.8718260496387955,
+  "macro_f1": 0.6543929386179016,
+  "epoch": 33
+ },
+ "checkpoint": "models/abl-no-velocity/best.pt"
+}

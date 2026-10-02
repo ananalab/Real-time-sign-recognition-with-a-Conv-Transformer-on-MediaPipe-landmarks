@@ -1,0 +1,229 @@
+{
+ "run": "asl-transformer-s2",
+ "subset": "test",
+ "n": 18412,
+ "n_classes": 250,
+ "top1": 0.64653486856398,
+ "top5": 0.8361394742559201,
+ "macro_f1": 0.6403757259512362,
+ "signer_acc_mean": 0.6460224054686642,
+ "signer_acc_std": 0.032647777607686855,
+ "latency": {
+  "model_p50_ms": 7.657187499717111,
+  "model_p95_ms": 10.601258001042877,
+  "preprocess_ms": 0.2603814599933685
+ },
+ "by_signer": [
+  {
+   "g": "49445",
+   "acc": 0.6175523349436393,
+   "n": 4968
+  },
+  {
+   "g": "25571",
+   "acc": 0.6323415265200517,
+   "n": 3865
+  },
+  {
+   "g": "32319",
+   "acc": 0.6414895855249316,
+   "n": 4753
+  },
+  {
+   "g": "55372",
+   "acc": 0.692706174886034,
+   "n": 4826
+  }
+ ],
+ "by_missing": [
+  {
+   "bin": "0",
+   "acc": 0.6958151155527795,
+   "n": 3202
+  },
+  {
+   "bin": "0-10%",
+   "acc": 0.7681242807825086,
+   "n": 1738
+  },
+  {
+   "bin": "10-25%",
+   "acc": 0.7387231089521166,
+   "n": 2882
+  },
+  {
+   "bin": "25-50%",
+   "acc": 0.667997604312238,
+   "n": 5009
+  },
+  {
+   "bin": ">50%",
+   "acc": 0.5135280415696112,
+   "n": 5581
+  }
+ ],
+ "worst_classes": [
+  {
+   "label": "there",
+   "acc": 0.05333333333333334
+  },
+  {
+   "label": "finger",
+   "acc": 0.09333333333333334
+  },
+  {
+   "label": "give",
+   "acc": 0.18181818181818182
+  },
+  {
+   "label": "close",
+   "acc": 0.1935483870967742
+  },
+  {
+   "label": "go",
+   "acc": 0.2361111111111111
+  },
+  {
+   "label": "sticky",
+   "acc": 0.23880597014925373
+  },
+  {
+   "label": "pen",
+   "acc": 0.25
+  },
+  {
+   "label": "beside",
+   "acc": 0.26229508196721313
+  },
+  {
+   "label": "cloud",
+   "acc": 0.265625
+  },
+  {
+   "label": "lamp",
+   "acc": 0.2676056338028169
+  }
+ ],
+ "confused_pairs": [
+  {
+   "true": "awake",
+   "pred": "wake",
+   "count": 37,
+   "rate": 0.5
+  },
+  {
+   "true": "pen",
+   "pred": "pencil",
+   "count": 36,
+   "rate": 0.45
+  },
+  {
+   "true": "wake",
+   "pred": "awake",
+   "count": 30,
+   "rate": 0.38461538461538464
+  },
+  {
+   "true": "think",
+   "pred": "penny",
+   "count": 26,
+   "rate": 0.34210526315789475
+  },
+  {
+   "true": "listen",
+   "pred": "hear",
+   "count": 26,
+   "rate": 0.2736842105263158
+  },
+  {
+   "true": "say",
+   "pred": "chin",
+   "count": 26,
+   "rate": 0.36619718309859156
+  },
+  {
+   "true": "cat",
+   "pred": "kitty",
+   "count": 25,
+   "rate": 0.3333333333333333
+  },
+  {
+   "true": "lips",
+   "pred": "mouth",
+   "count": 24,
+   "rate": 0.32
+  },
+  {
+   "true": "ear",
+   "pred": "hear",
+   "count": 23,
+   "rate": 0.2911392405063291
+  },
+  {
+   "true": "look",
+   "pred": "see",
+   "count": 23,
+   "rate": 0.25274725274725274
+  },
+  {
+   "true": "hear",
+   "pred": "listen",
+   "count": 22,
+   "rate": 0.25
+  },
+  {
+   "true": "mom",
+   "pred": "farm",
+   "count": 21,
+   "rate": 0.26582278481012656
+  },
+  {
+   "true": "there",
+   "pred": "boat",
+   "count": 20,
+   "rate": 0.26666666666666666
+  },
+  {
+   "true": "doll",
+   "pred": "mouse",
+   "count": 19,
+   "rate": 0.25333333333333335
+  },
+  {
+   "true": "pretend",
+   "pred": "mouse",
+   "count": 19,
+   "rate": 0.24675324675324675
+  },
+  {
+   "true": "pencil",
+   "pred": "pen",
+   "count": 19,
+   "rate": 0.2714285714285714
+  },
+  {
+   "true": "minemy",
+   "pred": "please",
+   "count": 18,
+   "rate": 0.23376623376623376
+  },
+  {
+   "true": "mouth",
+   "pred": "lips",
+   "count": 18,
+   "rate": 0.24324324324324326
+  },
+  {
+   "true": "duck",
+   "pred": "goose",
+   "count": 18,
+   "rate": 0.2222222222222222
+  },
+  {
+   "true": "table",
+   "pred": "minemy",
+   "count": 17,
+   "rate": 0.265625
+  }
+ ]
+}

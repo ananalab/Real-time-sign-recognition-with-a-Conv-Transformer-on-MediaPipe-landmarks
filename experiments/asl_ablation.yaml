@@ -1,0 +1,15 @@
+# One-factor-at-a-time ablations of the Conv-Transformer (seed 0, validation set only).
+name: asl-ablation
+sources: [kaggle_asl]
+runs:
+  - {run_name: abl-no-augment, overrides: [train.cache_val=true, augment=null]}
+  - {run_name: abl-no-lips, overrides: [train.cache_val=true, "preprocess_overrides={parts: [left_hand, right_hand, pose]}"]}
+  - {run_name: abl-hands-only, overrides: [train.cache_val=true, "preprocess_overrides={parts: [left_hand, right_hand]}"]}
+  - {run_name: abl-no-handlocal, overrides: [train.cache_val=true, "preprocess_overrides={hand_local: false}"]}
+  - {run_name: abl-no-velocity, overrides: [train.cache_val=true, "preprocess_overrides={velocity: false}"]}
+  - {run_name: abl-no-canonical, overrides: [train.cache_val=true, "preprocess_overrides={canonical_hand: false}"]}
+  - {run_name: abl-xyz, overrides: [train.cache_val=true, "preprocess_overrides={use_z: true}"]}
+  - {run_name: abl-pad, overrides: [train.cache_val=true, "preprocess_overrides={length_mode: pad}"]}
+  - {run_name: abl-T32, overrides: [train.cache_val=true, "preprocess_overrides={T: 32}"]}
+  - {run_name: abl-T96, overrides: [train.cache_val=true, "preprocess_overrides={T: 96}", "model_overrides={max_len: 96}"]}
+  - {run_name: abl-random-split, overrides: [train.cache_val=true, data.split=splits/kaggle_asl_random.json], evaluate: [test]}

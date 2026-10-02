@@ -1,0 +1,18 @@
+{
+ "run": "lsfb-scratch-n100-s0",
+ "model": "transformer",
+ "dataset": "lsfb_isol",
+ "n_params": 2129764,
+ "n_classes": 100,
+ "n_train": 9923,
+ "n_val": 4423,
+ "train_minutes": 18.008003036181133,
+ "git": "unknown",
+ "best_val": {
+  "top1": 0.6703594845127742,
+  "top5": 0.8865023739543296,
+  "macro_f1": 0.6114077686717821,
+  "epoch": 42
+ },
+ "checkpoint": "models/lsfb-scratch-n100-s0/best.pt"
+}

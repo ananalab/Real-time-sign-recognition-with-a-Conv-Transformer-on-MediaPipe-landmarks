@@ -1,0 +1,254 @@
+{
+ "run": "lsfb-scratch-nall-s0",
+ "subset": "val",
+ "n": 4423,
+ "n_classes": 100,
+ "top1": 0.7723264752430476,
+ "top5": 0.931720551661768,
+ "macro_f1": 0.7031126574960601,
+ "signer_acc_mean": 0.7266597773292816,
+ "signer_acc_std": 0.07539832170148245,
+ "latency": {
+  "model_p50_ms": 13.01513500038709,
+  "model_p95_ms": 13.989696050157363,
+  "preprocess_ms": 0.6839379550001468
+ },
+ "by_signer": [
+  {
+   "g": "S074",
+   "acc": 0.5939849624060151,
+   "n": 133
+  },
+  {
+   "g": "S015",
+   "acc": 0.616,
+   "n": 125
+  },
+  {
+   "g": "S085",
+   "acc": 0.7222222222222222,
+   "n": 180
+  },
+  {
+   "g": "S023",
+   "acc": 0.7338129496402878,
+   "n": 278
+  },
+  {
+   "g": "S083",
+   "acc": 0.7453183520599251,
+   "n": 534
+  },
+  {
+   "g": "S039",
+   "acc": 0.7521865889212828,
+   "n": 343
+  },
+  {
+   "g": "S071",
+   "acc": 0.76,
+   "n": 25
+  },
+  {
+   "g": "S040",
+   "acc": 0.7995708154506438,
+   "n": 2330
+  },
+  {
+   "g": "S084",
+   "acc": 0.8168421052631579,
+   "n": 475
+  }
+ ],
+ "by_missing": [
+  {
+   "bin": "0",
+   "acc": 0.7751727541954591,
+   "n": 4052
+  },
+  {
+   "bin": "0-10%",
+   "acc": 0.7685185185185185,
+   "n": 216
+  },
+  {
+   "bin": "10-25%",
+   "acc": 0.7258064516129032,
+   "n": 124
+  },
+  {
+   "bin": "25-50%",
+   "acc": 0.6206896551724138,
+   "n": 29
+  },
+  {
+   "bin": ">50%",
+   "acc": 0.5,
+   "n": 2
+  }
+ ],
+ "worst_classes": [
+  {
+   "label": "JUSQUE",
+   "acc": 0.125
+  },
+  {
+   "label": "PAS",
+   "acc": 0.17647058823529413
+  },
+  {
+   "label": "CA-VEUT-DIRE",
+   "acc": 0.1836734693877551
+  },
+  {
+   "label": "ATTENDRE.STOP",
+   "acc": 0.2631578947368421
+  },
+  {
+   "label": "ENVIRON",
+   "acc": 0.3125
+  },
+  {
+   "label": "POUR",
+   "acc": 0.3333333333333333
+  },
+  {
+   "label": "APPELER",
+   "acc": 0.36
+  },
+  {
+   "label": "BEAUCOUP",
+   "acc": 0.36363636363636365
+  },
+  {
+   "label": "CONNAITRE",
+   "acc": 0.3684210526315789
+  },
+  {
+   "label": "FINIR",
+   "acc": 0.3684210526315789
+  }
+ ],
+ "confused_pairs": [
+  {
+   "true": "CA-VEUT-DIRE",
+   "pred": "DIRE",
+   "count": 34,
+   "rate": 0.6938775510204082
+  },
+  {
+   "true": "OUI",
+   "pred": "JUSTE.F",
+   "count": 20,
+   "rate": 0.055248618784530384
+  },
+  {
+   "true": "MAIS",
+   "pred": "FALLOIR",
+   "count": 19,
+   "rate": 0.18095238095238095
+  },
+  {
+   "true": "POUR",
+   "pred": "ENTENDANT",
+   "count": 13,
+   "rate": 0.2549019607843137
+  },
+  {
+   "true": "FINIR",
+   "pred": "C-EST-TOUT",
+   "count": 12,
+   "rate": 0.3157894736842105
+  },
+  {
+   "true": "JUSTE.F",
+   "pred": "OUI",
+   "count": 11,
+   "rate": 0.2
+  },
+  {
+   "true": "1",
+   "pred": "TOUJOURS",
+   "count": 9,
+   "rate": 0.16666666666666666
+  },
+  {
+   "true": "C-EST-TOUT",
+   "pred": "FINIR",
+   "count": 8,
+   "rate": 0.3076923076923077
+  },
+  {
+   "true": "CONNAITRE",
+   "pred": "SAVOIR",
+   "count": 8,
+   "rate": 0.42105263157894735
+  },
+  {
+   "true": "POUR",
+   "pred": "PENSER",
+   "count": 8,
+   "rate": 0.1568627450980392
+  },
+  {
+   "true": "MOT",
+   "pred": "PERSONNE",
+   "count": 7,
+   "rate": 0.21212121212121213
+  },
+  {
+   "true": "QUOI",
+   "pred": "AVOIR",
+   "count": 7,
+   "rate": 0.050359712230215826
+  },
+  {
+   "true": "APRES",
+   "pred": "LAISSER",
+   "count": 7,
+   "rate": 0.19444444444444445
+  },
+  {
+   "true": "SOURD",
+   "pred": "FALLOIR",
+   "count": 6,
+   "rate": 0.0392156862745098
+  },
+  {
+   "true": "OUI",
+   "pred": "APRES",
+   "count": 6,
+   "rate": 0.016574585635359115
+  },
+  {
+   "true": "ENVIRON",
+   "pred": "LS",
+   "count": 5,
+   "rate": 0.3125
+  },
+  {
+   "true": "MAIS",
+   "pred": "PERSONNE",
+   "count": 5,
+   "rate": 0.047619047619047616
+  },
+  {
+   "true": "PLUS",
+   "pred": "AUSSI",
+   "count": 5,
+   "rate": 0.20833333333333334
+  },
+  {
+   "true": "OUI",
+   "pred": "BEAUCOUP.F",
+   "count": 5,
+   "rate": 0.013812154696132596
+  },
+  {
+   "true": "MAIS",
+   "pred": "NON",
+   "count": 5,
+   "rate": 0.047619047619047616
+  }
+ ]
+}

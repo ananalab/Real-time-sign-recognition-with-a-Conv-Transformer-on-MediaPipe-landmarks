@@ -1,0 +1,18 @@
+{
+ "run": "abl-no-lips",
+ "model": "transformer",
+ "dataset": "kaggle_asl",
+ "n_params": 2127994,
+ "n_classes": 250,
+ "n_train": 62084,
+ "n_val": 13981,
+ "train_minutes": 38.47781899770101,
+ "git": "unknown",
+ "best_val": {
+  "top1": 0.6882912524139904,
+  "top5": 0.8754023317359273,
+  "macro_f1": 0.6756262979079651,
+  "epoch": 41
+ },
+ "checkpoint": "models/abl-no-lips/best.pt"
+}

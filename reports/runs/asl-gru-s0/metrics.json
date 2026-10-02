@@ -1,0 +1,18 @@
+{
+ "run": "asl-gru-s0",
+ "model": "gru",
+ "dataset": "kaggle_asl",
+ "n_params": 1426810,
+ "n_classes": 250,
+ "n_train": 62084,
+ "n_val": 13981,
+ "train_minutes": 40.87361798286438,
+ "git": "unknown",
+ "best_val": {
+  "top1": 0.6569630212431157,
+  "top5": 0.8755453830198126,
+  "macro_f1": 0.64732571351294,
+  "epoch": 37
+ },
+ "checkpoint": "models/asl-gru-s0/best.pt"
+}

@@ -1,0 +1,18 @@
+{
+ "run": "abl-T96",
+ "model": "transformer",
+ "dataset": "kaggle_asl",
+ "n_params": 2164858,
+ "n_classes": 250,
+ "n_train": 62084,
+ "n_val": 13981,
+ "train_minutes": 40.374288483460745,
+ "git": "unknown",
+ "best_val": {
+  "top1": 0.6747729060868322,
+  "top5": 0.8797653958944281,
+  "macro_f1": 0.6636962634494885,
+  "epoch": 30
+ },
+ "checkpoint": "models/abl-T96/best.pt"
+}

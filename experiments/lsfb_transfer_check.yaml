@@ -1,0 +1,126 @@
+# Robustness of the negative transfer result: lower fine-tuning learning rate, and a linear probe
+# (encoder frozen for the whole training) to test whether ASL features are informative for LSFB.
+name: lsfb-transfer-check
+sources:
+- lsfb_isol
+pretrained_from:
+- anaisazouaoui/signrec-asl-main
+runs:
+- run_name: lsfb-ftlowlr-n5-s0
+  overrides:
+  - data.root=data/processed/lsfb_isol
+  - data.split=splits/lsfb_isol_signer.json
+  - train.cache_val=true
+  - transfer.init_from=models/asl-transformer-s0/best.pt
+  - seed=0
+  - train.epochs=300
+  - train.patience=75
+  - train.lr=2.0e-4
+  - train.warmup_epochs=1
+  - data.max_per_class=5
+  - train.num_workers=0
+- run_name: lsfb-ftlowlr-n5-s1
+  overrides:
+  - data.root=data/processed/lsfb_isol
+  - data.split=splits/lsfb_isol_signer.json
+  - train.cache_val=true
+  - transfer.init_from=models/asl-transformer-s0/best.pt
+  - seed=1
+  - train.epochs=300
+  - train.patience=75
+  - train.lr=2.0e-4
+  - train.warmup_epochs=1
+  - data.max_per_class=5
+  - train.num_workers=0
+- run_name: lsfb-ftlowlr-n25-s0
+  overrides:
+  - data.root=data/processed/lsfb_isol
+  - data.split=splits/lsfb_isol_signer.json
+  - train.cache_val=true
+  - transfer.init_from=models/asl-transformer-s0/best.pt
+  - seed=0
+  - train.epochs=120
+  - train.patience=30
+  - train.lr=2.0e-4
+  - train.warmup_epochs=1
+  - data.max_per_class=25
+  - train.num_workers=0
+- run_name: lsfb-ftlowlr-n25-s1
+  overrides:
+  - data.root=data/processed/lsfb_isol
+  - data.split=splits/lsfb_isol_signer.json
+  - train.cache_val=true
+  - transfer.init_from=models/asl-transformer-s0/best.pt
+  - seed=1
+  - train.epochs=120
+  - train.patience=30
+  - train.lr=2.0e-4
+  - train.warmup_epochs=1
+  - data.max_per_class=25
+  - train.num_workers=0
+- run_name: lsfb-ftlowlr-nall-s0
+  overrides:
+  - data.root=data/processed/lsfb_isol
+  - data.split=splits/lsfb_isol_signer.json
+  - train.cache_val=true
+  - transfer.init_from=models/asl-transformer-s0/best.pt
+  - seed=0
+  - train.epochs=60
+  - train.patience=15
+  - train.lr=2.0e-4
+  - train.warmup_epochs=1
+- run_name: lsfb-ftlowlr-nall-s1
+  overrides:
+  - data.root=data/processed/lsfb_isol
+  - data.split=splits/lsfb_isol_signer.json
+  - train.cache_val=true
+  - transfer.init_from=models/asl-transformer-s0/best.pt
+  - seed=1
+  - train.epochs=60
+  - train.patience=15
+  - train.lr=2.0e-4
+  - train.warmup_epochs=1
+- run_name: lsfb-probe-n5-s0
+  overrides:
+  - data.root=data/processed/lsfb_isol
+  - data.split=splits/lsfb_isol_signer.json
+  - train.cache_val=true
+  - transfer.init_from=models/asl-transformer-s0/best.pt
+  - seed=0
+  - train.epochs=300
+  - train.patience=75
+  - transfer.freeze_epochs=300
+  - data.max_per_class=5
+  - train.num_workers=0
+- run_name: lsfb-probe-n5-s1
+  overrides:
+  - data.root=data/processed/lsfb_isol
+  - data.split=splits/lsfb_isol_signer.json
+  - train.cache_val=true
+  - transfer.init_from=models/asl-transformer-s0/best.pt
+  - seed=1
+  - train.epochs=300
+  - train.patience=75
+  - transfer.freeze_epochs=300
+  - data.max_per_class=5
+  - train.num_workers=0
+- run_name: lsfb-probe-nall-s0
+  overrides:
+  - data.root=data/processed/lsfb_isol
+  - data.split=splits/lsfb_isol_signer.json
+  - train.cache_val=true
+  - transfer.init_from=models/asl-transformer-s0/best.pt
+  - seed=0
+  - train.epochs=60
+  - train.patience=15
+  - transfer.freeze_epochs=60
+- run_name: lsfb-probe-nall-s1
+  overrides:
+  - data.root=data/processed/lsfb_isol
+  - data.split=splits/lsfb_isol_signer.json
+  - train.cache_val=true
+  - transfer.init_from=models/asl-transformer-s0/best.pt
+  - seed=1
+  - train.epochs=60
+  - train.patience=15
+  - transfer.freeze_epochs=60

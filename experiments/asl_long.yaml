@@ -1,0 +1,9 @@
+# Longer schedule for the Conv-Transformer (headroom beyond the 50-epoch budget of the comparisons),
+# and two ablations re-run without early stopping (they had stopped on a plateau at high learning
+# rate, before the end of the cosine schedule).
+name: asl-long
+sources: [kaggle_asl]
+runs:
+  - {run_name: asl-transformer-long, overrides: [train.cache_val=true, seed=0, train.epochs=150, train.patience=30]}
+  - {run_name: abl-no-handlocal-full, overrides: [train.cache_val=true, train.patience=50, "preprocess_overrides={hand_local: false}"]}
+  - {run_name: abl-xyz-full, overrides: [train.cache_val=true, train.patience=50, "preprocess_overrides={use_z: true}"]}

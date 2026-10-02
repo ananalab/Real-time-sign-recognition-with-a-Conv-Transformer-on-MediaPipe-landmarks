@@ -1,0 +1,18 @@
+{
+ "run": "abl-no-handlocal",
+ "model": "transformer",
+ "dataset": "kaggle_asl",
+ "n_params": 2142586,
+ "n_classes": 250,
+ "n_train": 62084,
+ "n_val": 13981,
+ "train_minutes": 16.208273271719616,
+ "git": "unknown",
+ "best_val": {
+  "top1": 0.6383663543380301,
+  "top5": 0.8767613189328374,
+  "macro_f1": 0.6260369765946595,
+  "epoch": 10
+ },
+ "checkpoint": "models/abl-no-handlocal/best.pt"
+}

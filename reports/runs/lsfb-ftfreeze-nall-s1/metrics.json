@@ -1,0 +1,18 @@
+{
+ "run": "lsfb-ftfreeze-nall-s1",
+ "model": "transformer",
+ "dataset": "lsfb_isol",
+ "n_params": 2129764,
+ "n_classes": 100,
+ "n_train": 26114,
+ "n_val": 4423,
+ "train_minutes": 17.200458145141603,
+ "git": "unknown",
+ "best_val": {
+  "top1": 0.7607958399276509,
+  "top5": 0.9235812796744292,
+  "macro_f1": 0.6926364489394884,
+  "epoch": 42
+ },
+ "checkpoint": "models/lsfb-ftfreeze-nall-s1/best.pt"
+}

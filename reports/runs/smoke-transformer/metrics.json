@@ -1,0 +1,18 @@
+{
+ "run": "smoke-transformer",
+ "model": "transformer",
+ "dataset": "kaggle_asl",
+ "n_params": 2158714,
+ "n_classes": 250,
+ "n_train": 62084,
+ "n_val": 13981,
+ "train_minutes": 2.327810649077098,
+ "git": "unknown",
+ "best_val": {
+  "top1": 0.5619769687432945,
+  "top5": 0.8454330877619627,
+  "macro_f1": 0.5443006668773792,
+  "epoch": 1
+ },
+ "checkpoint": "models/smoke-transformer/best.pt"
+}

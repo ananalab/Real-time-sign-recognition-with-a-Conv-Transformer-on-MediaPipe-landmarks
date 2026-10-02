@@ -1,0 +1,40 @@
+{
+ "kaggle_asl": {
+  "n_samples": 94477,
+  "n_classes": 250,
+  "n_signers": 21,
+  "per_class_min": 299,
+  "per_class_median": 381.5,
+  "per_class_max": 415,
+  "duration_median_s": 0.7333333333333333,
+  "frames_median": 22.0,
+  "frames_p95": 135.0,
+  "fps": 30.0,
+  "missing": {
+   "left_hand": 0.7218419452305654,
+   "right_hand": 0.6165557034828711,
+   "any_hand": 0.3411750464070112,
+   "pose": 0.0,
+   "lips": 0.0071024608951575485
+  }
+ },
+ "lsfb_isol": {
+  "n_samples": 55286,
+  "n_classes": 100,
+  "n_signers": 99,
+  "per_class_min": 216,
+  "per_class_median": 387.0,
+  "per_class_max": 3293,
+  "duration_median_s": 0.32,
+  "frames_median": 16.0,
+  "frames_p95": 41.0,
+  "fps": 50.0,
+  "missing": {
+   "left_hand": 0.10335408035503901,
+   "right_hand": 0.08147393759909545,
+   "any_hand": 0.015134021625811794,
+   "pose": 0.0001259148449589626,
+   "lips": 0.01617858205614899
+  }
+ }
+}

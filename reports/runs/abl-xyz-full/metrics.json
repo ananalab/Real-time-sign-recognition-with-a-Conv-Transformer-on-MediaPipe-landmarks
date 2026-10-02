@@ -1,0 +1,18 @@
+{
+ "run": "abl-xyz-full",
+ "model": "transformer",
+ "dataset": "kaggle_asl",
+ "n_params": 2200954,
+ "n_classes": 250,
+ "n_train": 62084,
+ "n_val": 13981,
+ "train_minutes": 44.77911393245061,
+ "git": "unknown",
+ "best_val": {
+  "top1": 0.6721979829768973,
+  "top5": 0.861311780273228,
+  "macro_f1": 0.6603416871577215,
+  "epoch": 43
+ },
+ "checkpoint": "models/abl-xyz-full/best.pt"
+}

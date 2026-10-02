@@ -1,0 +1,229 @@
+{
+ "run": "asl-gru-s2",
+ "subset": "test",
+ "n": 18412,
+ "n_classes": 250,
+ "top1": 0.6242124701281773,
+ "top5": 0.8380947208342385,
+ "macro_f1": 0.6166178509406272,
+ "signer_acc_mean": 0.6237691601859834,
+ "signer_acc_std": 0.034176261767755706,
+ "latency": {
+  "model_p50_ms": 8.325646002049325,
+  "model_p95_ms": 11.794924649439054,
+  "preprocess_ms": 0.5618279199916287
+ },
+ "by_signer": [
+  {
+   "g": "49445",
+   "acc": 0.6008454106280193,
+   "n": 4968
+  },
+  {
+   "g": "32319",
+   "acc": 0.606564275194614,
+   "n": 4753
+  },
+  {
+   "g": "25571",
+   "acc": 0.6131953428201811,
+   "n": 3865
+  },
+  {
+   "g": "55372",
+   "acc": 0.674471612101119,
+   "n": 4826
+  }
+ ],
+ "by_missing": [
+  {
+   "bin": "0",
+   "acc": 0.6864459712679575,
+   "n": 3202
+  },
+  {
+   "bin": "0-10%",
+   "acc": 0.7410817031070196,
+   "n": 1738
+  },
+  {
+   "bin": "10-25%",
+   "acc": 0.7064538514920194,
+   "n": 2882
+  },
+  {
+   "bin": "25-50%",
+   "acc": 0.6376522259932123,
+   "n": 5009
+  },
+  {
+   "bin": ">50%",
+   "acc": 0.4975810786597384,
+   "n": 5581
+  }
+ ],
+ "worst_classes": [
+  {
+   "label": "there",
+   "acc": 0.04
+  },
+  {
+   "label": "cloud",
+   "acc": 0.0625
+  },
+  {
+   "label": "give",
+   "acc": 0.18181818181818182
+  },
+  {
+   "label": "go",
+   "acc": 0.19444444444444445
+  },
+  {
+   "label": "fast",
+   "acc": 0.2
+  },
+  {
+   "label": "lamp",
+   "acc": 0.2112676056338028
+  },
+  {
+   "label": "snack",
+   "acc": 0.21621621621621623
+  },
+  {
+   "label": "finger",
+   "acc": 0.22666666666666666
+  },
+  {
+   "label": "think",
+   "acc": 0.23684210526315788
+  },
+  {
+   "label": "close",
+   "acc": 0.24193548387096775
+  }
+ ],
+ "confused_pairs": [
+  {
+   "true": "wake",
+   "pred": "awake",
+   "count": 41,
+   "rate": 0.5256410256410257
+  },
+  {
+   "true": "say",
+   "pred": "chin",
+   "count": 35,
+   "rate": 0.49295774647887325
+  },
+  {
+   "true": "pen",
+   "pred": "pencil",
+   "count": 31,
+   "rate": 0.3875
+  },
+  {
+   "true": "awake",
+   "pred": "wake",
+   "count": 29,
+   "rate": 0.3918918918918919
+  },
+  {
+   "true": "think",
+   "pred": "penny",
+   "count": 29,
+   "rate": 0.3815789473684211
+  },
+  {
+   "true": "ear",
+   "pred": "hear",
+   "count": 27,
+   "rate": 0.34177215189873417
+  },
+  {
+   "true": "listen",
+   "pred": "hear",
+   "count": 27,
+   "rate": 0.28421052631578947
+  },
+  {
+   "true": "lips",
+   "pred": "mouth",
+   "count": 24,
+   "rate": 0.32
+  },
+  {
+   "true": "look",
+   "pred": "see",
+   "count": 24,
+   "rate": 0.26373626373626374
+  },
+  {
+   "true": "mouth",
+   "pred": "lips",
+   "count": 23,
+   "rate": 0.3108108108108108
+  },
+  {
+   "true": "stay",
+   "pred": "same",
+   "count": 21,
+   "rate": 0.2876712328767123
+  },
+  {
+   "true": "pretend",
+   "pred": "mouse",
+   "count": 21,
+   "rate": 0.2727272727272727
+  },
+  {
+   "true": "glasswindow",
+   "pred": "tooth",
+   "count": 19,
+   "rate": 0.2375
+  },
+  {
+   "true": "find",
+   "pred": "feet",
+   "count": 19,
+   "rate": 0.24050632911392406
+  },
+  {
+   "true": "lamp",
+   "pred": "shhh",
+   "count": 19,
+   "rate": 0.2676056338028169
+  },
+  {
+   "true": "uncle",
+   "pred": "refrigerator",
+   "count": 19,
+   "rate": 0.24050632911392406
+  },
+  {
+   "true": "vacuum",
+   "pred": "hide",
+   "count": 18,
+   "rate": 0.2727272727272727
+  },
+  {
+   "true": "outside",
+   "pred": "go",
+   "count": 18,
+   "rate": 0.225
+  },
+  {
+   "true": "there",
+   "pred": "hesheit",
+   "count": 17,
+   "rate": 0.22666666666666666
+  },
+  {
+   "true": "table",
+   "pred": "minemy",
+   "count": 17,
+   "rate": 0.265625
+  }
+ ]
+}

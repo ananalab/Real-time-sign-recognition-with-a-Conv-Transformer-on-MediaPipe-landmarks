@@ -1,0 +1,9 @@
+# Two short runs to validate the Kaggle pipeline and measure epoch time on GPU.
+name: asl-smoke
+sources: [kaggle_asl]
+runs:
+  - run_name: smoke-transformer
+    overrides: [train.epochs=2, train.warmup_epochs=1]
+    evaluate: [val]
+  - run_name: smoke-gru
+    overrides: [model=configs/model/gru.yaml, train.epochs=2, train.warmup_epochs=1]
