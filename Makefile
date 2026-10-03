@@ -1,4 +1,4 @@
-.PHONY: install lint format test figures web clean
+.PHONY: install lint format test analysis figures paper web clean
 
 PY := uv run python
 
@@ -18,8 +18,16 @@ format:
 test:
 	uv run pytest
 
+analysis:
+	$(PY) scripts/stats_tests.py
+	$(PY) scripts/analyse_lsfb_gap.py
+
 figures:
 	$(PY) scripts/make_figures.py
+
+paper:
+	cd paper && latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
+	cp paper/main.pdf report.pdf
 
 web:
 	cd app/web && python3 -m http.server 8080

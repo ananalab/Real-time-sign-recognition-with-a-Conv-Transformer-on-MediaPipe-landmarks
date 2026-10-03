@@ -22,8 +22,15 @@ __pycache__/
 *.egg-info/
 .ipynb_checkpoints/
 
-# LaTeX sources of the report (only the compiled report.pdf is versioned)
-paper/
+# LaTeX build files of the report (sources in paper/, compiled copy in report.pdf)
+paper/*.aux
+paper/*.bbl
+paper/*.blg
+paper/*.fdb_latexmk
+paper/*.fls
+paper/*.log
+paper/*.out
+paper/main.pdf
 
 # generated
 logs/

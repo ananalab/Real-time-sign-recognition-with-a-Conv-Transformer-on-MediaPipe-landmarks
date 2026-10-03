@@ -1,0 +1,17 @@
+Pose-based isolated sign recognition is commonly evaluated on random splits and rarely deployed on
+consumer hardware. We study it under the condition that matters in practice: recognising signs
+produced by people absent from the training data. A single preprocessing function, shared by
+training and by a JavaScript port, converts MediaPipe Holistic landmarks into features for a
+2.2\,M-parameter convolution--Transformer. On Google ISLR (\numAslClasses{} American Sign Language
+signs, \numAslSigners{} signers), the model reaches \numTrTestTop{}\,\% top-1 accuracy on four
+unseen signers, against \numGruTestTop{}\,\% for a bidirectional GRU and \numAslLogregTest{}\,\% for a statistical
+baseline; a random split overestimates this accuracy by \numLeakGap{} points. One-factor ablations
+identify the canonical dominant hand as the most influential preprocessing step. On LSFB-ISOL
+(\numLsfbClasses{} glosses of French Belgian Sign Language), initialising the model from ASL brings
+no gain at any training-set size, from \numLcMin{} examples per sign to the full corpus
+and is slightly but significantly harmful with all data (\numLsfbFtTest{}\,\% against
+\numLsfbScratchTest{}\,\% from scratch on 40 unseen signers). We also
+document three silent failure modes of such pipelines: augmentations cancelled by normalisation,
+anisotropic coordinates in anamorphic video, and feature outliers that break INT8 quantisation.
+In the browser, the model classifies a sign in \numFpBrowser{}\,ms on one CPU thread and
+reproduces the PyTorch predictions on every tested clip.

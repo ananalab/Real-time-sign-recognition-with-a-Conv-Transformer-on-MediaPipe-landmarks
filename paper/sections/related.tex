@@ -1,0 +1,40 @@
+\section{Related work}
+\label{sec:related}
+
+\paragraph{Isolated sign recognition datasets.}
+Large ASL vocabularies are available in WLASL \citep{li2020wlasl} (2{,}000 glosses collected from
+the web), MS-ASL \citep{joze2019msasl} and ASL Citizen \citep{desai2023aslcitizen}; the latter is
+community-sourced, collected with explicit consent and provided with signer-independent splits.
+BSL-1K \citep{albanie2020bsl1k} mines British Sign Language signs from broadcast footage using
+mouthing cues. The Google ISLR competition \citep{kaggle_islr} released MediaPipe landmarks only,
+recorded by 21 participants on smartphones, which removes the need to store video. For sign
+languages related to French, LSFB-ISOL and LSFB-CONT \citep{fink2021lsfb} are derived from the LSFB
+corpus \citep{meurant2015corpus}. On LSFB-ISOL, \citet{fink2023dictionary} train a two-layer
+Transformer on MediaPipe landmarks of 700 glosses with more than 20 examples each, under a
+signer-independent split, and report 54\,\% top-1 and 83\,\% top-10 accuracy. No subset of
+LSFB-ISOL has become a standard benchmark, so our results on the 100 most frequent glosses cannot be
+compared directly with theirs. MEDIAPI-SKEL \citep{bull2020mediapi} and
+Dicta-Sign-LSF-v2 \citep{belissen2020dictasign} provide continuous French Sign Language (LSF) with
+skeletons or annotations but no isolated-sign benchmark.
+
+\paragraph{Pose-based models.}
+Skeleton sequences have been classified with spatio-temporal graph convolutions
+\citep{yan2018stgcn,jiang2021samslr,tunga2021gcnbert}, with Transformers operating directly on
+keypoints \citep{bohacek2022spoter}, and with self-supervised pre-training of hand representations
+\citep{hu2021signbert}. The strongest solutions of the Google ISLR competition combined depthwise
+temporal convolutions with a few self-attention layers, a design close to the Conformer used in
+speech recognition \citep{gulati2020conformer}, trained for several hundred epochs with strong
+regularisation and averaged over ensembles of models. Our convolution--Transformer follows this
+design at a smaller scale. Recurrent networks \citep{cho2014gru} remain a light and competitive baseline.
+
+\paragraph{Transfer across sign languages.}
+Sign languages share articulatory parameters (handshape, movement, location), which suggests that
+features learned on a large corpus may transfer to a smaller one \citep{yosinski2014transferable}.
+Large-scale pre-training improves recognition on smaller datasets of the \emph{same} language
+\citep{albanie2020bsl1k}. Transfer between distinct sign languages from pose data alone has
+received less attention; we provide a controlled study with learning curves.
+
+\paragraph{Responsible deployment.}
+Following \citet{bragg2019interdisciplinary} and \citet{yin2021including}, we describe the system as
+isolated sign recognition, document its limitations in a model card \citep{mitchell2019modelcards}
+and process video locally on the device of the user.

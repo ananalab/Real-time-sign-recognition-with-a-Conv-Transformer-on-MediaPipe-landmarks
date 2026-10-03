@@ -163,3 +163,23 @@ Reference: 68.3 % val top-1. One factor changed at a time.
 - Earlier measurements (≈11 / 34 ms) were inflated by training jobs running in parallel.
 - Low learning rate (2e-4) fine-tuning, 25 examples/sign: 46.3 % val (standard ft 50.6, scratch 51.5).
 - Linear probe on the frozen ASL encoder, all data: 38.3 % val.
+
+## Analyses added after review (no retraining)
+
+- `scripts/stats_tests.py`: paired bootstrap of accuracy differences (hierarchical over signers,
+  or over clips within signers) and exact McNemar tests on seed ensembles.
+  - ASL, Conv-Transformer vs BiGRU: +1.8 pts, 95 % interval [0.9, 2.9] with signers resampled,
+    McNemar p < 0.001. The ranking does not depend on the four test signers.
+  - LSFB, ASL-pretrained vs scratch (all data): −2.1 pts [−2.8, −1.4] (fine-tuned) and −1.7 pts
+    [−2.3, −1.2] (frozen 5 epochs): pre-training is slightly but significantly harmful.
+- `scripts/analyse_lsfb_gap.py`: LSFB validation accuracy (77.2 %) exceeds test accuracy (68.3 %)
+  mainly because 3 of the 9 validation signers contribute 75 % of its clips; per signer, 72.7 ± 2.5 %
+  (validation) vs 67.9 ± 2.0 % (test). Re-weighting the test classes to the validation distribution
+  gives 70.2 %. Test signers whose dialogue partner is a training signer: 71.8 % vs 64.7 %.
+- Known limitations made explicit in the report: velocities are computed after resampling to 64
+  frames (scale depends on clip length and frame rate), all transfer runs start from ASL seed 0, and
+  the linear probe still updated batch-normalisation statistics of the frozen encoder.
+- `tests/conftest.py` loads onnxruntime before torch: in the other order the test process aborted
+  intermittently at exit on macOS ("recursive_mutex lock failed").
+- The LaTeX sources are versioned in `paper/`; `make paper` rebuilds `report.pdf`, and the macro
+  file is rewritten from scratch so that no stale number survives.

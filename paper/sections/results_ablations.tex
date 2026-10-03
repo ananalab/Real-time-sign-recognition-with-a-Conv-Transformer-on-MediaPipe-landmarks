@@ -1,0 +1,48 @@
+\paragraph{Leakage.}
+With a random, sample-level split of the same size, in which every signer appears in both training
+and test data, the Conv-Transformer reaches \numLeakRandom{}\,\% test top-1 instead of
+\numLeakSigner{}\,\%. A random split thus overestimates the accuracy on new users by \numLeakGap{}
+points, more than the effect of any architectural or preprocessing choice studied here.
+
+\paragraph{Ablations.}
+\Cref{fig:ablations} changes one factor at a time with respect to the full model
+(\numRefValTop{}\,\% validation top-1; seed-to-seed standard deviation of 0.1 point). Early stopping
+proved to be a confounding factor. Two variants initially stopped on a validation plateau after 21
+and 31 epochs, while the learning rate was still high, and appeared to lose 4.4 and 2.7 points.
+Re-run over the full 50-epoch schedule, their effects reduce to \numAblNoHandlocal{} (no hand-local
+features) and \numAblXyz{} (depth added) points. The other variants marked with $\dagger$
+(\numAblEarlyStopped{} in total) stopped between epochs 41 and 46; their effects may be slightly
+overestimated, and our compute budget did not allow re-running them.
+
+Under this caveat, the canonical dominant hand has the largest effect (\numAblNoCanonical{} points
+without it): otherwise, the same sign occupies either hand slot depending on the handedness of the
+signer and on mirroring. Velocities (\numAblNoVelocity{}), augmentation (\numAblNoAugment{}), depth
+(\numAblXyz{}, consistent with the noise of monocular depth estimates) and the hand-local shape
+features (\numAblNoHandlocal{}) have moderate effects.
+
+Three findings depart from common practice. First, the lips and the upper body bring no
+measurable gain on this vocabulary (\numAblNoLips{} without lips, \numAblHandsOnly{} with hands
+only): the 250 signs are mainly distinguished by the hands, and mouthing is presumably rare in
+dictionary-like recordings. Second, shorter sequences perform as well ($T'=32$: \numAblTThreeTwo{})
+and longer ones no better ($T'=96$: \numAblTNineSix{}), the median clip containing only 22 frames.
+Third, zero-padding with a mask outperforms resampling (\numAblPad{}): resampling stretches short
+clips and removes the duration cue, whereas padding preserves the original temporal dynamics. The
+resampled configuration, fixed before the ablations, is kept in the rest of the study, but padding
+is the better choice for future work.
+
+\paragraph{Training budget and ensembles.}
+Training the Conv-Transformer for 150 instead of 50 epochs does not help (\numLongVal{}\,\% against
+\numRefValTop{}\,\% on validation): the late rise of the curves in \cref{fig:curves} reflects the
+annealing of the learning rate, not under-training. Averaging the predictions of the three seeds,
+by contrast, improves test top-1 to \numAslEnsTop{}\,\% on ASL (\numTrTestTopMean{}\,\% for a
+single model) and to \numLsfbEnsTop{}\,\% on LSFB (\numLsfbScratchTest{}\,\%), at three times the
+inference cost.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.62\linewidth]{ablations}
+  \caption{One-factor ablations of the Conv-Transformer on the ASL validation signers (seed 0).
+  $\dagger$: early stopping ended the run before the end of the 50-epoch schedule (epochs 41--46),
+  so the effect may be overestimated.}
+  \label{fig:ablations}
+\end{figure}

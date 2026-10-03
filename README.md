@@ -32,8 +32,11 @@ Top-1 accuracy on test signers not seen in training, mean ± std over three seed
 Main observations:
 
 - A random split (same people in train and test) gives 81.7 % on ASL instead of 64.8 %.
+- The Conv-Transformer beats the BiGRU by 1.8 points; a paired bootstrap that also resamples the
+  test signers gives a 95 % interval of [0.9, 2.9] points.
 - Starting the LSFB model from the ASL weights never helped, from 5 examples per sign up to the
-  full corpus. A linear probe on the frozen ASL encoder only reaches 38 %.
+  full corpus; with all data it is slightly but significantly worse (−2.1 points, 95 % interval
+  [−2.8, −1.4]). A linear probe on the frozen ASL encoder only reaches 38 %.
 - In the ablations, mirroring every clip to a canonical dominant hand matters most. Lips, depth,
   longer sequences and a 3x longer schedule do not help. One ablation looked five times more
   harmful than it is because early stopping fired on a plateau.
@@ -95,8 +98,10 @@ uv run python scripts/kaggle_train.py --experiments experiments/asl_main.yaml --
 uv run python scripts/run_baseline.py --data data/processed/kaggle_asl \
     --split splits/kaggle_asl_signer.json --eval-test
 
-# report figures and tables, demo
+# significance tests, LSFB validation/test analysis, figures and tables, report, demo
+make analysis
 make figures
+make paper
 uv run python scripts/export_web_assets.py --model asl=models/asl-transformer-s0/best.pt
 uv run python scripts/screenshot_demo.py
 make web                                                     # http://localhost:8080

@@ -1,0 +1,38 @@
+\begin{tikzpicture}[
+    font=\footnotesize,
+    node distance=4.5mm and 2.7mm,
+    box/.style={draw=inkTwo!60, rounded corners=2pt, fill=white, align=center,
+                minimum height=10mm, inner sep=3pt, text width=#1},
+    box/.default=17mm,
+    hl/.style={box=#1, fill=softBlue, draw=sOne},
+    hl/.default=17mm,
+    arr/.style={-{Stealth[length=2mm]}, draw=inkTwo, line width=0.6pt},
+    lab/.style={font=\scriptsize\itshape, text=inkTwo},
+  ]
+  % main row
+  \node[box=12.5mm] (cam) {Webcam\\or clip};
+  \node[box, right=of cam] (mp) {MediaPipe\\Holistic\\\scriptsize 543 points};
+  \node[box, right=of mp] (sub) {Unified\\subset\\\scriptsize $T\times89\times3$};
+  \node[hl=22mm, right=of sub] (pre) {\textbf{preprocess()}\\\scriptsize trim $\cdot$ mirror\\[-1pt]\scriptsize scale $\cdot$ resample};
+  \node[box, right=of pre] (feat) {Features\\\scriptsize $64\times440$};
+  \node[box, right=of feat] (model) {Conv-Transformer\\or BiGRU};
+  \node[box=12mm, right=of model] (out) {Top-5\\glosses};
+  \foreach \a/\b in {cam/mp, mp/sub, sub/pre, pre/feat, feat/model, model/out}
+    \draw[arr] (\a) -- (\b);
+
+  % training branch
+  \node[box=17mm, below=8mm of pre, fill=soft] (aug) {augment()\\\scriptsize train only};
+  \node[box=17mm, left=6mm of aug, fill=soft] (data) {ASL / LSFB\\datasets};
+  \draw[arr] (data) -- (aug);
+  \draw[arr] (aug) -- (pre);
+  \node[box=17mm, below=8mm of model, fill=soft] (onnx) {ONNX FP32\\$\to$ INT8};
+  \draw[arr] (model) -- (onnx);
+
+  % groupings
+  \begin{scope}[on background layer]
+    \node[fit=(cam)(mp)(sub)(pre)(feat)(model)(out), inner sep=3.5mm, rounded corners=4pt,
+          fill=sOne!4, draw=sOne!30] (rt) {};
+  \end{scope}
+  \node[lab, anchor=south west] at (rt.north west) {in the browser: MediaPipe Tasks JS $+$ preprocess.js $+$ ONNX Runtime Web};
+  \node[lab, anchor=north west] at ($(data.south west)+(0,-1mm)$) {training (PyTorch)};
+\end{tikzpicture}

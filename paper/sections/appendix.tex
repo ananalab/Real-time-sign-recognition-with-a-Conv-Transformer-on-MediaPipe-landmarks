@@ -1,0 +1,61 @@
+\section{Hyper-parameters}
+\label{app:hparams}
+
+\begin{table}[!ht]
+  \centering
+  \caption{Hyper-parameters shared by all experiments unless stated otherwise. All values are
+  read from the configuration files released with the code.}
+  \label{tab:hparams}
+  \small
+  \begin{tabular}{llp{5.0cm}}
+    \toprule
+    Group & Parameter & Value \\
+    \midrule
+    Preprocessing & frames $T'$ / length mode & 64 / linear resampling \\
+                  & coordinates & $(x, y)$; depth dropped \\
+                  & landmark parts & both hands, upper body (7 points), lips (40 points) \\
+                  & features per frame & positions, dominant-hand local shape, velocities ($F=440$) \\
+    \midrule
+    Augmentation  & spatial (body frame), probability & 0.8 \\
+                  & rotation / per-axis scale / shift & $\pm15^\circ$ / $[0.8, 1.2]$ / $\pm0.1$ shoulder widths \\
+                  & global speed / local warp & $[0.8, 1.2]$ / $\pm30\,\%$ over 4 segments \\
+                  & frame / landmark / hand dropping & 0.1 / 0.05 / 0.05 \\
+                  & Gaussian noise (image units) & 0.002 \\
+    \midrule
+    BiGRU         & input projection / hidden / layers & 192 / 192 per direction / 2 \\
+                  & pooling / dropout & masked mean $\Vert$ max / 0.3 \\
+    \midrule
+    Conv-Transformer & width / stages & 192 / 2 \\
+                  & per stage & 3 conv.\ blocks + 1 Transformer block \\
+                  & kernel / expansion / heads / MLP ratio & 17 / 2 / 4 / 2 \\
+                  & dropout & 0.2 \\
+    \midrule
+    Optimisation  & optimiser & AdamW, lr $10^{-3}$, weight decay 0.05 \\
+                  & schedule & 3 warm-up epochs, cosine decay \\
+                  & batch / max.\ epochs / patience & 128 / 50 / 10 (validation macro-F1) \\
+                  & label smoothing / gradient clipping & 0.1 / 1.0 \\
+                  & precision & mixed (fp16) on GPU \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{Landmark subset}
+\label{app:landmarks}
+
+\begin{table}[!ht]
+  \centering
+  \caption{Unified landmark subset, in the order used by the model (MediaPipe indices).}
+  \small
+  \begin{tabular}{lrl}
+    \toprule
+    Part & Points & MediaPipe indices \\
+    \midrule
+    Left hand & 21 & hand model 0--20 \\
+    Right hand & 21 & hand model 0--20 \\
+    Upper body & 7 & pose 0 (nose), 11--12 (shoulders), 13--14 (elbows), 15--16 (wrists) \\
+    Lips & 40 & face mesh: outer contour (20) and inner contour (20) \\
+    \midrule
+    Total & 89 & \\
+    \bottomrule
+  \end{tabular}
+\end{table}

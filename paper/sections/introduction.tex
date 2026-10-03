@@ -1,0 +1,54 @@
+\section{Introduction}
+\label{sec:intro}
+
+Sign languages are natural languages with their own lexicon and grammar, used by millions of Deaf
+and hard-of-hearing people. Automatic sign language processing covers tasks of increasing
+difficulty: \emph{isolated} sign recognition (one sign per clip, closed vocabulary), continuous
+recognition, and translation to and from spoken languages
+\citep{bragg2019interdisciplinary,koller2020survey,yin2021including}. This report addresses
+isolated recognition only. The distinction is not merely terminological: a classifier over a few
+hundred glosses ignores the grammar of the language, its use of space and its non-manual markers,
+and therefore cannot translate \citep{yin2021including}.
+
+\emph{Pose-based} approaches first extract body, hand and face landmarks with an off-the-shelf
+estimator such as MediaPipe Holistic
+\citep{lugaresi2019mediapipe,bazarevsky2020blazepose,zhang2020mediapipehands,kartynnik2019facemesh},
+then classify the resulting keypoint sequence. Compared with models operating on RGB video, they
+are compact, largely insensitive to background and appearance, and allow inference without
+transmitting video, which protects the privacy of users. The Google Isolated Sign Language
+Recognition (ISLR) competition \citep{kaggle_islr} established this setting with
+\numAslSamples{} landmark sequences of \numAslClasses{} American Sign Language (ASL) signs.
+
+Three questions remain insufficiently addressed in this setting. They structure the report.
+\begin{description}[leftmargin=1.2em,labelindent=0pt]
+  \item[RQ1 Generalisation.] How accurately do pose-based models recognise signs produced by
+        people absent from the training data, and how much does a random split overestimate this
+        accuracy?
+  \item[RQ2 Transfer.] Does pre-training on ASL, a comparatively well-resourced sign language,
+        improve recognition in French Belgian Sign Language (LSFB), in particular when few
+        labelled examples are available?
+  \item[RQ3 Deployment.] Can the complete pipeline run in real time in a web browser on a laptop
+        CPU while reproducing the predictions of the trained model?
+\end{description}
+
+\paragraph{Contributions.}
+\begin{itemize}
+  \item A single, unit-tested preprocessing function shared by training, evaluation and a
+        JavaScript port, whose outputs match the reference implementation within \numJsParity{}
+        (\cref{sec:method}).
+  \item A signer-independent comparison of a statistical baseline, a bidirectional GRU and a
+        convolution--Transformer on \numAslClasses{} ASL signs over three seeds, with paired
+        significance tests, a measurement of split leakage and one-factor ablations
+        (\cref{sec:results-asl,sec:ablations}).
+  \item A controlled transfer study from ASL to LSFB, with learning curves from \numLcMin{}
+        examples per sign to the full corpus and a linear probe of the pre-trained encoder
+        (\cref{sec:transfer}).
+  \item A fully client-side demo that classifies a sign in \numFpBrowser{}\,ms, and an analysis
+        of INT8 quantisation, which first degrades accuracy because of feature outliers and,
+        once corrected, remains slower on CPU (\cref{sec:efficiency}).
+\end{itemize}
+
+\Cref{sec:related} reviews related work. \Cref{sec:data,sec:method,sec:protocol} describe the
+data, the method and the evaluation protocol. \Cref{sec:results} reports the results,
+\cref{sec:discussion} discusses them together with their limitations, and
+\cref{sec:conclusion} answers the three research questions.

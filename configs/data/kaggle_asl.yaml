@@ -1,0 +1,5 @@
+# Google Isolated Sign Language Recognition (asl-signs), converted on Kaggle by kaggle/convert_asl
+name: kaggle_asl
+out_dir: data/processed/kaggle_asl
+kernel_slug: asl-signs-unified-subset
+fps: 30

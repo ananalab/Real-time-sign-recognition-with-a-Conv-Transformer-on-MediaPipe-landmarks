@@ -1,0 +1,132 @@
+\section{Results}
+\label{sec:results}
+
+\subsection{ASL: baselines and sequence models}
+\label{sec:results-asl}
+
+\begin{table}[t]
+  \centering
+  \caption{ASL results (\numAslClasses{} signs). Validation and test sets contain 3 and 4 signers
+  absent from training. Sequence models: mean $\pm$ standard deviation over three seeds, 50
+  epochs. The last column is the standard deviation of top-1 accuracy across the four test
+  signers. All values in \%.}
+  \label{tab:main}
+  \small
+  \input{tables/main_results.tex}
+\end{table}
+
+\Cref{tab:main} reports the main comparison. Temporal statistics are already informative: a
+logistic regression reaches \numAslLogregTest{}\,\% top-1 on unseen signers, about
+\numAslLogregChance{} times chance level. Gradient-boosted trees fit the training signers better
+but generalise worse (\numAslLgbmTest{}\,\% on test, \numAslLgbmDrop{} points below their
+validation score, against \numAslLogregDrop{} points for the linear model). With only 14
+training signers, flexible models on hand-crafted statistics capture signer-specific cues.
+
+Both sequence models exceed the baselines by more than 20 points. The Conv-Transformer reaches
+\numTrTestTop{}\,\% top-1 on the test signers and the BiGRU \numGruTestTop{}\,\%, with the same
+top-5 accuracy of \numTrTestTopFive{}\,\%. Variation across seeds is small (below one point), whereas variation
+across signers is large: accuracy ranges from \numSignerMin{} to \numSignerMax{}\,\% over the four
+test signers, and the Conv-Transformer outperforms the BiGRU on each of them
+(\cref{fig:signers}a). The difference of \numTrGruDiff{} points is significant even when the test
+signers themselves are resampled (signer-level 95\,\% interval
+[\numTrGruCiLo{}, \numTrGruCiHi{}]; clip-level [\numTrGruClipCiLo{}, \numTrGruClipCiHi{}];
+McNemar \numTrGruMcnemar{}), although four signers remain a small sample. Validation accuracy increases until the end of the 50-epoch schedule
+(\cref{fig:curves}), yet a three times longer schedule brings no improvement
+(\cref{sec:ablations}): the late gains result from the decay of the learning rate.
+
+\begin{figure}[t]
+  \centering
+  \begin{minipage}[b]{0.36\linewidth}
+    \includegraphics[width=\linewidth]{training_curves}
+    \caption{Validation top-1 during training (mean over seeds; band: min--max).}
+    \label{fig:curves}
+  \end{minipage}\hfill
+  \begin{minipage}[b]{0.6\linewidth}
+    \centering
+    \small
+    \captionof{table}{Most frequent confusions of the Conv-Transformer on the ASL test signers
+    (seed 0). Rate: share of the clips of the true sign.}
+    \label{tab:confusions}
+    \input{tables/confusions.tex}
+  \end{minipage}
+\end{figure}
+
+\paragraph{Error analysis.}
+The most frequent confusions (\cref{tab:confusions}) are linguistically plausible. Several pairs
+are near-synonyms that share an identical or very similar sign in many ASL varieties
+(\textsc{wake}/\textsc{awake}, \textsc{pen}/\textsc{pencil}, \textsc{look}/\textsc{see}); others
+differ by a small change of handshape or location (\textsc{duck}/\textsc{goose},
+\textsc{think}/\textsc{penny}). The hardest classes, \numWorstClasses{}, are pointing and
+directional signs whose form depends on the location of the referent, which a closed-vocabulary
+classifier cannot resolve. Part of the residual error is therefore a property of the vocabulary
+rather than of the model.
+
+Landmark quality is the other main factor (\cref{fig:signers}b). Accuracy reaches
+\numMissLowAcc{}\,\% when hands are missing in at most 10\,\% of the frames, but falls to
+\numMissHighAcc{}\,\% when no hand is detected in more than half of the frames, which concerns
+\numMissHighShare{}\,\% of the test clips. Clips with a hand visible in every frame are slightly
+less accurate than the next bin because they are shorter (median of \numFullHandFrames{} frames
+instead of \numPartHandFrames{}): among them, clips of at most ten frames, which are probably
+truncated, are recognised in \numShortAcc{}\,\% of cases, against \numTypicalAcc{}\,\% for clips of
+20 to 40 frames.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{signers_missing}
+  \caption{(a) Test top-1 for each unseen signer (mean and standard deviation over seeds).
+  (b) Test top-1 as a function of the share of frames in which neither hand is detected.}
+  \label{fig:signers}
+\end{figure}
+
+\subsection{Leakage, ablations and training budget}
+\label{sec:ablations}
+
+\input{sections/results_ablations}
+
+\subsection{Cross-lingual transfer to LSFB}
+\label{sec:transfer}
+
+\input{sections/results_transfer}
+
+\subsection{Efficiency and deployment}
+\label{sec:efficiency}
+
+\begin{table}[t]
+  \centering
+  \caption{Model size and single-sign latency on an Apple M1 CPU (one thread) after export to
+  ONNX. Native: ONNX Runtime; browser: ONNX Runtime Web (WebAssembly) in Chromium. INT8: dynamic
+  quantisation of the weight matrices, with the input projection kept in FP32. Validation top-1
+  on 2{,}000 ASL validation clips.}
+  \label{tab:export}
+  \small
+  \input{tables/export.tex}
+\end{table}
+
+\paragraph{Latency.}
+\Cref{tab:export} summarises the inference cost. Preprocessing takes about 0.3\,ms per clip in
+Python, and each sign is classified once, when the segmenter detects its end. The
+Conv-Transformer then requires \numFpNative{}\,ms natively and \numFpBrowser{}\,ms in the browser,
+and the BiGRU \numGruBrowser{}\,ms in the browser. Landmark extraction by MediaPipe, which runs on
+every frame, dominates the cost of the live demo.
+
+\paragraph{Quantisation.}
+Naive dynamic INT8 quantisation reduces the validation top-1 of the Conv-Transformer from 68\,\% to
+34\,\%. The cause is a small number of very large inputs: when a detected hand is tiny, the
+hand-local features (\cref{sec:preprocessing}) are divided by a near-zero length and reach values
+close to 200, while 99.9\,\% of them remain below 6.2. A per-tensor dynamic scale on the first
+layer then destroys the resolution of all other inputs. Keeping this single layer in FP32 fully
+restores accuracy. The quantised model is \numIntShrink{}$\times$ smaller but
+\numIntSlowdown{}$\times$ \emph{slower} on CPU, natively and in WebAssembly: at this scale,
+quantising and dequantising activations around many small matrix products costs more than integer
+arithmetic saves. Since the demo already downloads about 25\,MB for MediaPipe, it ships the FP32
+model.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{demo}
+  \caption{Browser demo replaying an LSFB-ISOL clip of an unseen test signer: skeleton, top-5
+  predictions with the true sign, best-recognised signs, history and vocabulary. The demo ships
+  one test clip for each of 40 glosses, of which the model recognises \numExampleAcc{}\,\%. With a
+  webcam, signs are segmented automatically from hand presence and motion.}
+  \label{fig:demo}
+\end{figure}

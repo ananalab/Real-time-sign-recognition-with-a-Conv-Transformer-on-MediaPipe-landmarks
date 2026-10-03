@@ -1,0 +1,126 @@
+\section{Method}
+\label{sec:method}
+
+\begin{figure}[t]
+  \centering
+  \input{figures/pipeline.tex}
+  \caption{System overview. The same preprocessing function serves training (Python) and the
+  browser runtime (JavaScript port, tested for parity). Only landmarks are processed; video never
+  leaves the device.}
+  \label{fig:pipeline}
+\end{figure}
+
+\Cref{fig:pipeline} summarises the system. A deterministic preprocessing function maps a raw
+landmark sequence to a fixed-size feature matrix, which is augmented during training only and
+classified by a sequence model.
+
+\subsection{Preprocessing}
+\label{sec:preprocessing}
+
+Let $X\in\mathbb{R}^{T\times L\times3}$ be a raw sequence. Preprocessing applies the following
+steps in order.
+
+\paragraph{Temporal trimming.} Leading and trailing frames without any detected hand are removed;
+a sequence in which no hand is ever detected is kept unchanged.
+
+\paragraph{Canonical dominant hand.} One-handed signs are produced with the dominant hand, and the
+handedness assigned by the landmark estimator depends on whether the image is mirrored. We count
+the frames in which each hand slot is detected and, if the left slot is more frequent, mirror the
+sequence: $x\mapsto 1-x$ for all points, combined with the permutation $\pi$ that swaps left and
+right hands, shoulders, elbows, wrists and symmetric lip points. The resulting features are
+invariant to a horizontal flip of the input whenever one hand dominates, a property verified by a
+unit test.
+
+\paragraph{Spatial normalisation.} Let $s^{l}_t$ and $s^{r}_t$ denote the shoulder positions in
+frame $t$, and $\mathcal{T}_s$ the set of frames in which both are detected. All points are
+centred and scaled as
+\begin{equation}
+  c = \frac{1}{|\mathcal{T}_s|}\sum_{t\in\mathcal{T}_s}\frac{s^{l}_t+s^{r}_t}{2}, \qquad
+  w = \frac{1}{|\mathcal{T}_s|}\sum_{t\in\mathcal{T}_s}\lVert s^{l}_t-s^{r}_t\rVert_2, \qquad
+  \tilde{X}_{t,j} = \frac{X_{t,j}-c}{w},
+\end{equation}
+applied to $(x,y)$, with $z$ divided by $w$. Both constants are computed over the whole clip, so
+that the motion of the hands relative to the body is preserved. If the shoulders are missing or
+degenerate ($w<0.02$), the centroid of all visible points and four times their mean standard
+deviation are used instead.
+
+\paragraph{Fixed length.} The clip is linearly resampled to $T'=64$ frames, which also normalises
+signing speed and frame rate (30\,fps for ASL, 50\,fps for LSFB). When an interpolation involves a
+missing neighbour, the value of the nearest frame is used. Zero-padding with a mask is evaluated as
+an alternative in \cref{sec:ablations}.
+
+\paragraph{Features.} Each frame is described by (i) the normalised $(x,y)$ coordinates of the 89
+landmarks; (ii) the dominant hand expressed relative to its wrist and divided by the length of the
+segment from the wrist to the base of the middle finger, which separates handshape from hand
+position; and (iii) the first-order temporal differences of (i) and (ii). Depth is discarded by
+default. This yields $F = 2\times(89+21)\times2 = 440$ features per frame. Remaining missing values
+are set to zero, i.e.\ missing landmarks are encoded at the body centre.
+
+\subsection{Data augmentation}
+Augmentation is applied during training only, in two stages. The first stage acts on the raw
+sequence: a time warp combining a global speed change ($\sigma\sim\mathcal{U}[0.8,1.2]$, the clip
+being resampled to $T/\sigma$ frames) with a smooth monotonic warp of the time axis over four
+segments with relative speeds in $[0.7,1.3]$; random frame dropping ($p=0.1$); random masking of
+individual landmarks ($p=0.05$) and of a whole hand in a frame ($p=0.05$); and Gaussian noise
+($\sigma=0.002$). The non-uniform component is essential: since every clip is resampled to $T'$
+frames, a uniform speed change alone would be almost entirely undone by length normalisation.
+
+The second stage is applied with probability $0.8$ \emph{after} shoulder normalisation, in the
+body frame: a rotation of up to $\pm15^\circ$, a per-axis scaling in $[0.8,1.2]$ and a translation
+of up to $0.1$ shoulder widths. Applied in image coordinates, before normalisation, translations
+and isotropic scalings would be cancelled exactly, as our unit tests confirm. Random draws are
+seeded by (seed, epoch, sample) for reproducibility.
+
+\subsection{Models}
+
+\paragraph{Input projection.} Both models first project each frame to $d=192$ dimensions with two
+linear layers, layer normalisation and GELU activations.
+
+\paragraph{BiGRU.} Two bidirectional GRU layers \citep{cho2014gru} with 192 hidden units per
+direction, followed by masked mean and max pooling over time and a linear classifier
+(\numGruParams{}\,M parameters).
+
+\paragraph{Convolution--Transformer.} After a learned positional embedding, the network stacks two
+stages, each made of three convolution blocks and one Transformer block
+\citep{vaswani2017attention}. A convolution block is a pre-norm residual unit: pointwise expansion
+with a gated linear unit \citep{dauphin2017glu}, depthwise temporal convolution with kernel size 17,
+batch normalisation, SiLU and pointwise projection, as in the convolution module of the Conformer
+\citep{gulati2020conformer}. Transformer blocks use four heads and an MLP ratio of two. The
+sequence is mean-pooled under the mask before the classifier (\numTrParams{}\,M parameters).
+Attention is implemented with plain matrix products, so that the model exports to ONNX without
+custom operators. We refer to this model as the Conv-Transformer.
+
+\subsection{Training}
+Models are trained with AdamW \citep{loshchilov2019adamw} (learning rate $10^{-3}$, weight decay
+$0.05$, batch size 128), a cosine schedule with three warm-up epochs, label smoothing of $0.1$
+\citep{szegedy2016rethinking} and gradient clipping at norm 1, for at most 50 epochs. Early stopping
+monitors the validation macro-F1 with a patience of 10 epochs, and the checkpoint with the best
+validation macro-F1 is retained. Mixed precision is used on GPU. \Cref{app:hparams} lists all
+hyper-parameters.
+
+\paragraph{Transfer.} For cross-lingual transfer, all weights except the classifier are
+initialised from the ASL model, and a new classifier is trained for the target vocabulary. Since
+the input representation is identical across datasets, no adapter is required. We compare full
+fine-tuning with a variant that freezes the encoder during the first five epochs. Two additional
+controls test the robustness of the result: fine-tuning with a five times lower learning rate, and
+a linear probe in which the encoder stays frozen throughout training.
+
+\subsection{Browser runtime}
+\label{sec:runtime}
+
+The demo runs the MediaPipe Holistic Landmarker (Tasks API, WebAssembly with GPU delegate) on the
+webcam stream, builds the 89-landmark frame and passes it to a segmenter that detects the start
+and end of each sign. The segmenter is a state machine: a sign starts after three consecutive
+frames with a visible hand and ends when the hands disappear for six frames, remain still (mean
+hand displacement below $0.012$ shoulder widths per frame) for fourteen frames, or after 120
+frames. The segment is then preprocessed by the JavaScript port and classified by the ONNX model
+with ONNX Runtime Web \citep{onnxruntime} (WebAssembly backend).
+
+Mismatches between training and deployment preprocessing are a common cause of failure in
+deployed systems. We therefore generate test fixtures from the Python implementation (missing
+hands, mirrored input, missing shoulders, single-frame and long clips, padding, depth features)
+and verify that the JavaScript port reproduces the features within \numJsParity{}, i.e.\ at
+single-precision accuracy. We also test the complete browser path: executed in headless Chromium
+through the code of the demo, the LSFB test clips shipped with the demo receive the same top-1
+prediction as with the PyTorch checkpoint (\numBrowserSame{} clips), with probabilities differing
+by at most $\numBrowserDiff{}$.

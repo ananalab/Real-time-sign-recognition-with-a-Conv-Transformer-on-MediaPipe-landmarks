@@ -1,0 +1,25 @@
+\section{Conclusion}
+\label{sec:conclusion}
+
+We built and evaluated an isolated sign recognition system based on MediaPipe landmarks, under a
+signer-independent protocol and with a fully client-side deployment. The three research questions
+receive the following answers.
+
+\paragraph{RQ1 Generalisation.} A 2.2\,M-parameter convolution--Transformer recognises
+\numAslClasses{} ASL signs produced by unseen signers with \numTrTestTop{}\,\% top-1 accuracy, and
+\numLsfbClasses{} LSFB glosses with \numLsfbScratchTest{}\,\%. A random split inflates the ASL
+accuracy by \numLeakGap{} points, and an early-stopping artefact had overstated the effect of one
+ablation fivefold: evaluation choices influence conclusions more than most design choices.
+
+\paragraph{RQ2 Transfer.} Pre-training on ASL does not improve LSFB recognition at any
+training-set size, even with five examples per sign, and with all training data it lowers test
+accuracy by a small but significant margin. Differences in recording and elicitation
+conditions likely outweigh what the two languages share at the level of pose features.
+
+\paragraph{RQ3 Deployment.} The complete pipeline runs in a web browser, classifies a sign in
+\numFpBrowser{}\,ms on one CPU thread and reproduces the predictions of the PyTorch model on every
+tested clip. INT8 quantisation reduces model size but not latency on CPU.
+
+Future work includes self-supervised pre-training on in-domain continuous signing, a rejection
+class for out-of-vocabulary signs, richer non-manual features, and an evaluation of the demo with
+Deaf signers.

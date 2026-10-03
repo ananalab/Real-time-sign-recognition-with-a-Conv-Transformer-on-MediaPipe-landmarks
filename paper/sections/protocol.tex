@@ -1,0 +1,30 @@
+\section{Experimental protocol}
+\label{sec:protocol}
+
+\paragraph{Splits.} All splits are \emph{signer-independent} and frozen in version-controlled
+files. For ASL, the \numAslSigners{} participants are divided into 14 training, 3 validation and 4
+test signers. For LSFB, we keep the official test signers and draw 15\,\% of the official training
+signers for validation (\cref{tab:datasets}). To measure leakage (RQ1), we also build a random,
+sample-level ASL split with the same proportions, in which every signer appears in all subsets.
+
+\paragraph{Metrics.} We report top-1 and top-5 accuracy, macro-F1 over classes, and the standard
+deviation of top-1 accuracy across test signers. Model selection and all ablations rely on the
+validation signers; the test signers are used once, to evaluate the final models.
+
+\paragraph{Statistical tests.} Two models evaluated on the same test clips are compared with a
+paired bootstrap of their accuracy difference \citep{efron1993bootstrap}, using per-clip
+correctness averaged over the three seeds. The \emph{signer-level} bootstrap draws test signers
+with replacement and then clips within each drawn signer, so that its 95\,\% interval accounts for
+the choice of the test signers; the \emph{clip-level} bootstrap only draws clips within each signer
+and treats the signers as fixed. We also apply an exact McNemar test \citep{mcnemar1947note} to the
+predictions of the seed ensembles.
+
+\paragraph{Baselines.} Besides chance level, we compute per-coordinate temporal statistics (mean,
+standard deviation, minimum and maximum of the normalised position features over the clip,
+$4\times220$ features) and classify them with a multinomial logistic regression or with
+gradient-boosted trees (LightGBM).
+
+\paragraph{Seeds and compute.} Main models are trained with three seeds and reported as mean
+$\pm$ standard deviation; ablations use a single seed. Deep models are trained on one NVIDIA T4 GPU
+in a cloud notebook, except for two transfer controls run on the GPU of an Apple M1 laptop once
+the cloud quota was exhausted. Latency is measured on the laptop CPU with one thread.

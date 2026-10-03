@@ -1,0 +1,10 @@
+{
+ "nose_ratio_asl": 0.3983004093170166,
+ "asl_handless_outside_sign_share": 0.02401671208997966,
+ "asl_longer_than_T_share": 0.152,
+ "asl_handless_sample_clips": 5000,
+ "nose_ratio_lsfb_raw": 0.7626159191131592,
+ "nose_ratio_lsfb_corrected": 0.42897146940231323,
+ "nose_ratio_lsfb_four_three": 0.5719619989395142,
+ "lsfb_test_top10_share": 0.3226392985575175
+}

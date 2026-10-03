@@ -52,3 +52,18 @@ def test_metrics() -> None:
     assert set(zip(pairs["true"], pairs["pred"], strict=True)) == {("b", "c"), ("b", "a")}
     acc = per_group_accuracy(y, probs.argmax(1), np.array(["x", "x", "y"]))
     assert acc.loc["y", "acc"] == 0.0
+
+
+def test_paired_bootstrap_detects_real_difference_only() -> None:
+    from signrec.metrics import mcnemar, paired_bootstrap
+
+    rng = np.random.default_rng(0)
+    groups = np.repeat(np.arange(20), 50)
+    a = rng.random(1000) < 0.7
+    same = paired_bootstrap(a, a, groups, n=500)
+    assert same["diff"] == 0 and same["ci_low"] == same["ci_high"] == 0
+    b = a & (rng.random(1000) < 0.8)  # b loses ~20 % of a's correct clips
+    for level in ("signer", "clip"):
+        res = paired_bootstrap(a, b, groups, level=level, n=500)
+        assert 0 < res["ci_low"] < res["diff"] < res["ci_high"] and res["p"] < 0.01
+    assert mcnemar(a, b)["only_b"] == 0 and mcnemar(a, b)["p"] < 1e-6

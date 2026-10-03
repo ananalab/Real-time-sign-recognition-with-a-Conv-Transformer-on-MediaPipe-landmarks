@@ -1,0 +1,65 @@
+\Cref{tab:transfer} reports the results on LSFB-ISOL with all training data. Trained from scratch,
+the Conv-Transformer reaches \numLsfbScratchTest{}\,\% top-1 and \numLsfbScratchTestFOne{}\,\%
+macro-F1 on the 40 official test signers, well above the statistical baselines (\numLsfbLogregTest{}\,\% and
+\numLsfbLogregTestFOne{}\,\%). Macro-F1 is markedly lower than top-1 on this corpus because of its long tail: the ten
+most frequent glosses account for \numLsfbTopTenShare{}\,\% of the test clips.
+
+\paragraph{Validation and test accuracy.}
+On LSFB, validation accuracy exceeds test accuracy by far more than on ASL (\numGapValClip{} against
+\numGapTestClip{}\,\%). The validation set is small and unbalanced across signers: three of its
+\numGapValSigners{} signers contribute \numGapTopThreeShare{}\,\% of its clips. Averaged per signer,
+accuracy is \numGapValPerSigner{}\,$\pm$\,\numGapValPerSignerSem{}\,\% on validation (seed 0) and
+\numGapTestPerSigner{}\,$\pm$\,\numGapTestPerSignerSem{}\,\% on test (mean over seeds; mean $\pm$
+standard error over signers), and re-weighting the test clips to the class distribution of the validation set raises
+test accuracy to \numGapTestReweighted{}\,\%. LSFB clips come from dialogues: test signers whose
+conversation partner belongs to the training signers (\numGapTestPartnerInN{} of
+\numGapTestSigners{}) are recognised with \numGapTestPartnerIn{}\,\% accuracy, the others with
+\numGapTestPartnerOut{}\,\%, which suggests that shared conversations, and therefore shared topics
+and signing styles, also favour held-out signers. Validation scores are therefore used only to
+compare configurations, never as an estimate of performance on new signers.
+
+\paragraph{ASL pre-training.}
+Initialising the encoder from the ASL model does not improve recognition. With all training data,
+fine-tuning the ASL model yields \numLsfbFtTest{}\,\% (\numLsfbFtVal{}\,\% on validation, against
+\numLsfbScratchVal{}\,\% from scratch), and freezing the encoder during the first five epochs only
+narrows the gap (\numLsfbFreezeTest{}\,\%). Pre-training is not merely useless but slightly harmful: relative to training from scratch,
+test accuracy changes by \numLsfbFtDiff{} points with fine-tuning (signer-level 95\,\% interval
+[\numLsfbFtCiLo{}, \numLsfbFtCiHi{}], \numLsfbFtP{}) and by \numLsfbFreezeDiff{} points with the
+frozen variant ([\numLsfbFreezeCiLo{}, \numLsfbFreezeCiHi{}]). The learning curves of \cref{fig:transfer} show that
+this result does not depend on the size of the training set. Both initialisations are
+indistinguishable from 5 to 25 examples per sign (the largest difference, \numGainFew{} points at
+5 examples, lies within one seed standard deviation), and the model trained from scratch leads
+from 50 examples per sign onwards, by \numScratchLeadAll{} points with all data.
+
+\paragraph{Controls.}
+Two controls exclude an inadequate fine-tuning procedure as the explanation. First, a linear probe
+trained on top of the frozen ASL encoder with all LSFB training data reaches \numProbeAll{}\,\%
+validation top-1, far below the model trained from scratch (\numLsfbScratchVal{}\,\%) and even
+below the logistic regression on temporal statistics (\numLsfbLogregVal{}\,\%). The ASL
+representation therefore retains some information about LSFB signs, but less than simple features
+of the target data. Second, with 25 examples per sign, fine-tuning with a five times lower
+learning rate gives \numLowlrTwentyFive{}\,\% validation top-1, below both standard fine-tuning
+(\numFtTwentyFive{}\,\%) and training from scratch (\numScratchTwentyFive{}\,\%) with the same seed.
+Both controls use a single seed, and every transfer run starts from the ASL model of seed 0, so
+the variability of the pre-trained model itself is not sampled. During the linear probe, the
+batch-normalisation statistics of the frozen encoder were still updated on LSFB, a mild form of
+adaptation; the probe is therefore, if anything, favoured, which does not change its conclusion.
+
+\begin{figure}[t]
+  \centering
+  \begin{minipage}[b]{0.44\linewidth}
+    \includegraphics[width=\linewidth]{transfer_curve}
+    \caption{LSFB validation top-1 as a function of the number of training examples per sign
+    (mean $\pm$ s.d.\ over three seeds). ``All'' corresponds to a median of \numLsfbMedianPerClass{} examples per
+    sign.}
+    \label{fig:transfer}
+  \end{minipage}\hfill
+  \begin{minipage}[b]{0.53\linewidth}
+    \centering
+    \small
+    \captionof{table}{LSFB-ISOL, 100 glosses, all training data. Mean $\pm$ s.d.\ over three
+    seeds, values in \%.}
+    \label{tab:transfer}
+    \resizebox{\linewidth}{!}{\input{tables/transfer.tex}}
+  \end{minipage}
+\end{figure}

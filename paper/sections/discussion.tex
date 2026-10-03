@@ -1,0 +1,69 @@
+\section{Discussion}
+\label{sec:discussion}
+
+\paragraph{Sources of error.}
+All results are obtained on people absent from training, a setting that \cref{sec:ablations} shows
+to be considerably harder than a random split suggests. The remaining errors have three main
+sources, which call for different remedies: signs that are genuinely ambiguous within a closed
+vocabulary (near-synonyms, pointing and directional signs); landmark detection failures, which
+dominate the hardest clips; and variation between signers, which exceeds the difference between
+the two architectures. More signers and better hand tracking are therefore likely to help more
+than a larger classifier.
+
+\paragraph{Absence of transfer from ASL.}
+We expected an ASL encoder to help, at least with few LSFB examples, since both languages build
+signs from handshapes, movements and locations. The two corpora, however, differ in more than the
+language. ASL clips are citation forms recorded one at a time on a smartphone; LSFB clips are
+extracted from spontaneous conversations filmed in a studio, are less than half as long (median
+\numLsfbDurMedian{}\,s against \numAslDurMedian{}\,s) and are co-articulated with neighbouring signs.
+Hands are missing in \numAslNoHandPct{}\,\% of the ASL frames but in \numLsfbNoHandPct{}\,\% of the LSFB
+frames, and the landmarks come from two
+generations of MediaPipe. The pre-trained encoder is therefore adapted to a different input
+distribution, and even a few hundred labelled clips of the target corpus provide more relevant
+information than this prior. This explanation is consistent with our measurements but not
+demonstrated: separating the effect of the language from that of the recording conditions would
+require a second ASL corpus of conversational signs, or an LSFB corpus of citation forms.
+Self-supervised pre-training on unlabelled, in-domain continuous signing, for instance LSFB-CONT
+\citep{fink2021lsfb} or MEDIAPI-SKEL \citep{bull2020mediapi} for French Sign Language, appears to be
+a more promising direction than supervised cross-lingual pre-training.
+
+\paragraph{Methodological pitfalls.}
+Several of our observations are inexpensive to check yet easily overlooked. (i) Image-space
+translation and scaling augmentations are cancelled by body-centred normalisation and must be
+applied after it. (ii) Normalised landmark coordinates are anisotropic whenever pixels or frames
+are not square, which distorts the body frame across datasets. (iii) Early stopping on a plateau
+while the learning rate is still high can make an ablation appear much more harmful than it is.
+(iv) Rare feature outliers, harmless in floating point, can break post-training quantisation, and
+quantisation does not necessarily make a small model faster on CPU. (v) A preprocessing function
+implemented in two languages must be tested for parity, which costs little once fixtures are
+generated from the reference implementation.
+
+\paragraph{Limitations.}
+(i) The ASL test set contains only four signers, so per-signer estimates are uncertain, and all
+LSFB clips come from a single corpus recorded in one studio setting. (ii) Both vocabularies are
+small and fixed: an out-of-vocabulary sign is always mapped to the closest known sign, and the demo
+has no rejection class. (iii) Our ASL accuracy remains well below that of the best competition
+solutions \citep{kaggle_islr}, which relied on stronger regularisation and augmentation, much
+longer schedules and ensembles of several models, and were trained on all 21 participants, whereas
+our models see 14 of them and are tested on a different set. We did not measure how much each of
+these factors contributes. A longer schedule alone did not help our model, and the ablations used a
+single seed, \numAblEarlyStopped{} of them ending before the full schedule; differences of about one
+point between ablations should therefore not be over-interpreted. (iv) Because every clip is
+stretched to 64 frames, velocities are expressed per resampled frame: their scale depends on the
+duration of the clip and on the frame rate of the source (30 or 50\,fps), which may partly explain
+why padding performed better in the ablations. Resampling to a common frame rate and padding would
+remove this dependence. (v) The lip contour is the only non-manual information used; eyebrows, gaze and head
+movements, which carry grammatical information, are ignored. (vi) The demo segments signs from hand
+presence and motion, which suits signs produced one at a time with a pause but not natural,
+continuous signing. (vii) No Deaf signer took part in the evaluation of the demo; its usefulness
+for the community remains to be established with its members.
+
+\paragraph{Ethical considerations.}
+Both datasets were released for research by their creators, under the Kaggle competition rules and
+the CC BY 4.0 licence (LSFB-ISOL). ASL data are never redistributed; the demo ships a few LSFB clips
+with attribution. The demo processes video locally and stores nothing. Face and body landmarks can
+nonetheless identify a person, so any extension that records them should obtain explicit consent.
+We describe the system as \emph{isolated sign recognition}: presenting such a classifier as a
+translator would mislead users about its capabilities and could cause harm where communication
+matters. A model card summarising intended uses, out-of-scope uses and known biases accompanies
+the code \citep{mitchell2019modelcards}.

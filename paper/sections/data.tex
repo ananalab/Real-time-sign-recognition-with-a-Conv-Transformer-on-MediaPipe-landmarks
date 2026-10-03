@@ -1,0 +1,98 @@
+\section{Data}
+\label{sec:data}
+
+\begin{table}[t]
+  \centering
+  \caption{Datasets after conversion to the unified format. Durations are medians; ``no hand'' is
+  the share of frames in which neither hand is detected.}
+  \label{tab:datasets}
+  \small
+  \input{tables/datasets.tex}
+\end{table}
+
+\paragraph{Google ISLR (ASL).}
+The competition data \citep{kaggle_islr} contain \numAslSamples{} sequences of \numAslClasses{} ASL
+signs produced by \numAslSigners{} participants. Each frame provides the 543 MediaPipe Holistic
+landmarks (468 face, 33 body and 21 per hand); no video is released. Signs were recorded one at a
+time with a smartphone, in a dictionary-like setting. The landmarks come from the legacy MediaPipe
+Holistic \emph{solution}, an older pipeline than the MediaPipe Tasks API used in the browser
+(\cref{sec:runtime}).
+
+\paragraph{LSFB-ISOL (French Belgian Sign Language).}
+LSFB-ISOL v2 \citep{fink2021lsfb} contains \numLsfbAllInstances{} isolated signs cut from
+spontaneous conversations of the LSFB corpus \citep{meurant2015corpus}, covering
+\numLsfbAllGlosses{} glosses and \numLsfbAllSigners{} signers recorded at \numLsfbFps{}\,fps.
+Landmarks are extracted with the MediaPipe Tasks models (33 body and 478 face points). Since the
+gloss distribution is long-tailed, we retain the \numLsfbClasses{} most frequent glosses performed
+by at least ten signers. We use the \emph{raw} landmarks, without the interpolation and smoothing
+of the default release, so that missing detections appear as they would during live use. Clips
+shorter than four frames are discarded (\numLsfbDroppedPct{}\,\% of the selected clips, most of
+them empty). LSFB is related to LSF but is a distinct language; LSFB results are never presented
+as LSF results.
+
+\paragraph{Unified landmark subset.}
+Both datasets are converted to a common representation of $L=89$ landmarks per frame: both hands
+($2\times21$), seven upper-body points (nose, shoulders, elbows, wrists) and 40 points of the inner
+and outer lip contours, which carry part of the mouthing information (\cref{app:landmarks}). Hips
+are excluded because they usually lie outside the camera field. A sequence is a tensor
+$X\in\mathbb{R}^{T\times L\times 3}$ of normalised image coordinates $(x,y,z)$, with \texttt{NaN}
+for undetected landmarks. The raw ASL data (more than 40\,GB of parquet files) are converted once
+in a cloud notebook into a 2\,GB file; LSFB poses are streamed from the dataset server and reduced
+on the fly.
+
+\paragraph{Aspect ratio.}
+MediaPipe normalises $x$ by the frame width and $y$ by the frame height. Distances are therefore
+comparable across sources only after multiplying $y$ by the height-to-width ratio of the
+\emph{displayed} image. LSFB videos are $720\times576$ PAL frames with a 16:9 display aspect, which
+inflates vertical distances by $1024/576\approx1.78$. We verified this with an anatomical
+invariant, the height of the nose above the shoulder line divided by the shoulder span: its median
+is \numNoseAsl{} in ASL and \numNoseLsfbRaw{} in raw LSFB, and \numNoseLsfbCorr{} after correction
+(a 4:3 assumption would give \numNoseLsfbFourThree{}).
+We therefore scale $y$ by 0.5625 for LSFB, by 1 for ASL, whose coordinates are close to isotropic,
+and by the actual frame ratio for webcam and video input in the demo. After this correction and
+the normalisation of \cref{sec:preprocessing}, both corpora share the same body frame
+(\cref{fig:normalisation}).
+
+\paragraph{Comparison of the corpora.}
+\Cref{fig:data-overview} contrasts the two datasets. ASL classes are balanced and signs are
+recorded in isolation. LSFB class frequencies span more than an order of magnitude, and clips are
+shorter (median \numLsfbDurMedian\,s against \numAslDurMedian\,s) because
+conversational signs are co-articulated with their neighbours. Missing hands are far more frequent
+in ASL (\cref{fig:missing}): one hand is absent from most frames, and neither is detected in
+\numAslNoHandPct{}\,\% of them, against \numLsfbNoHandPct{}\,\% in LSFB. These frames are not
+idle: in a random sample of \numHandlessSample{} clips, only \numHandlessOutside{}\,\% of the
+frames without any hand lie before or after the sign. The others fall within it, when fast motion
+or the narrow smartphone framing defeats the hand detector. \Cref{fig:examples} shows one clip of each dataset.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{dataset_overview}
+  \caption{Dataset overview. (a) Examples per class, sorted; (b) distribution of clip durations;
+  (c) examples per signer, sorted.}
+  \label{fig:data-overview}
+\end{figure}
+
+\begin{figure}[t]
+  \centering
+  \begin{minipage}[b]{0.42\linewidth}
+    \includegraphics[width=\linewidth]{missing_parts}
+    \caption{Share of frames in which a body part is not detected.}
+    \label{fig:missing}
+  \end{minipage}\hfill
+  \begin{minipage}[b]{0.54\linewidth}
+    \includegraphics[width=\linewidth]{examples}
+    \caption{One ASL and one LSFB clip, eight evenly spaced frames (hand slots in orange and
+    blue, lips in pink, upper body in grey).}
+    \label{fig:examples}
+  \end{minipage}
+\end{figure}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{normalisation}
+  \caption{Per-clip mean position of the nose, the shoulders and the dominant wrist for 400 random
+  clips of each corpus. (a) Image coordinates; (b) body frame without aspect correction, where the
+  LSFB nose lies twice as high as the ASL one; (c) body frame with aspect correction, where both
+  corpora align.}
+  \label{fig:normalisation}
+\end{figure}
